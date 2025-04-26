@@ -7,7 +7,6 @@ export function useThankYouViewModel() {
     const [uiState, setUiState] = useState<ThankYouUiState>({status: 'loading'});
 
     useEffect(() => {
-        // localStorageService.set("test", "test")
         localStorageService.remove("test")
         const getExperimentId = () => {
             const experiment = localStorageService.get<Experiment>('current_experiment');
