@@ -1,11 +1,12 @@
 import React from "react";
 import {useThankYouViewModel} from "../hooks/useThankYouViewModel.ts";
 import {ErrorCard} from "../components/ErrorCard.tsx";
+import {LoadingContent} from "../components/LoadingContent.tsx";
 
 const ThankYouPage: React.FC = () => {
     const uiState = useThankYouViewModel();
 
-    if (uiState.status === 'loading') return <p>Loading...</p>;
+    if (uiState.status === 'loading') return <LoadingContent loadingStrings={null}/>;
     if (uiState.status === 'error') return <ErrorCard />;
 
     return <div>

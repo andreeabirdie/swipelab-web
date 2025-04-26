@@ -1,7 +1,6 @@
 export const localStorageService = {
     get<T>(key: string): T | null {
         const item = localStorage.getItem(key);
-        console.error(`Retrieved ${item}`);
         if (!item) return null;
 
         try {
