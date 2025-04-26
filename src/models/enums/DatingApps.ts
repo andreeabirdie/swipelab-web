@@ -1,10 +1,10 @@
 export enum DatingApps {
-    Tinder,
-    Hinge,
-    Bumble,
-    Grindr,
-    OkCupid,
-    Happn,
-    Other,
-    None
+    Tinder='Tinder',
+    Hinge='Hinge',
+    Bumble='Bumble',
+    Grindr='Grindr',
+    OkCupid='OkCupid',
+    Happn='Happn',
+    Other='Other',
+    None='None'
 }

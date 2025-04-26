@@ -1,5 +1,5 @@
 export enum Education {
-    HIGH_SCHOOL,
-    BACHELOR,
-    MASTER_OR_PHD
+    HIGH_SCHOOL="High School",
+    BACHELOR="Bachelor",
+    MASTER_OR_PHD="Master/Phd"
 }
