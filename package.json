@@ -29,7 +29,7 @@
     "date-fns": "^4.1.0",
     "formik": "^2.4.6",
     "framer-motion": "^12.9.2",
-    "react-spinners": "^0.17.0",
+    "react-loading-indicators": "^1.0.0",
     "yup": "^1.6.1"
   }
 }
