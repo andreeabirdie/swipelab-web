@@ -1,6 +1,6 @@
 import {Box, FormControl, FormControlLabel, FormHelperText, Radio, RadioGroup, TextField} from "@mui/material";
 import React, {ChangeEvent} from "react";
-import { Ethnicity } from "../models/enums/Ethnicity";
+import {Ethnicity} from "../models/enums/Ethnicity";
 
 type EthnicityRadioGroupProps = {
     name: string,

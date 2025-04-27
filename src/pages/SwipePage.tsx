@@ -1,14 +1,14 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {Experiment} from "../models/Experiment.ts";
 
-const SwipePage : React.FC = () => (
-    <>
-        <ul>
-            <li><Link to="/">Go to Onboarding</Link></li>
-            <li><Link to="/postswipe">Go to Post Swipe page</Link></li>
-            <li><Link to="/thankyou">Go to Thank You page</Link></li>
-        </ul>
-    </>
-);
+type SwipePageProps = {
+    experiment: Experiment
+}
+
+const SwipePage: React.FC<SwipePageProps> = ({experiment}) => {
+    return <div>
+        <h2>{`SwipePage for ${experiment.experimentId}`}</h2>
+    </div>;
+};
 
 export default SwipePage
