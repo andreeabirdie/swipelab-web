@@ -2,7 +2,7 @@ import {Ethnicity} from "./enums/Ethnicity";
 import {Gender} from "./enums/Gender";
 import {Education} from "./enums/Education";
 import {LookingFor} from "./enums/LookingFor";
-import {ActivityOftenRate} from "./enums/ActivityOftenRate";
+import {VicesPreference} from "./enums/VicesPreference.ts";
 import {KidsPreference} from "./enums/KidsPreference";
 
 export interface DatingProfile {
@@ -15,8 +15,8 @@ export interface DatingProfile {
     height: number;
     gender: Gender;
     lookingFor: LookingFor;
-    drinking: ActivityOftenRate;
-    smoking: ActivityOftenRate;
+    drinking: VicesPreference;
+    smoking: VicesPreference;
     kidsPreference: KidsPreference;
     education: Education;
     hobbies: string[];

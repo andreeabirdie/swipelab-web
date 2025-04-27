@@ -1,0 +1,49 @@
+{
+  "onboarding_intro_to_experiment": "Thank you for your interest in participating. This study is part of a thesis project exploring decision-making in online dating and will take about x minutes of your time.",
+  "onboarding_data_disclaimer": "Your participation is completely voluntary and you can withdraw at any time. All data will be kept confidential and used only for research purposes.",
+  "onboarding_honesty_disclaimer": "Your answers are completely anonymous and will not be connected to your identity in any way. We encourage you to be as honest as possible.",
+  "onboarding_preferences_disclaimer": "First, we need you to answer some questions to see if you are eligible for our study, and to help us find the right matches for you. Note: We will take your preferences into consideration, but you might still see people outside of your preferences.",
+
+  "onboarding_date_of_birth_question": "When were you born?",
+  "onboarding_ethnicity_question": "What's your ethnicity?",
+  "onboarding_residence_country_label": "Where do you live?",
+  "onboarding_gender_label": "Gender",
+  "onboarding_height_question": "What's your height?",
+  "onboarding_relationship_label": "What's your relationship status?",
+  "onboarding_relationship_note": "Your relationship status does not affect your eligibility for this study. However, keep in mind that this study will ask you to use a dating-app-like system, where you have to swipe on profiles and judge them as if you were looking for a match. If that makes you feel uncomfortable, you don't have to participate.",
+  "onboarding_interested_in_gender_label": "Which gender are you interested in?",
+  "onboarding_ages_question": "What ages would you like to see?",
+  "onboarding_dating_experience_question": "Have you ever used a dating app?",
+  "onboarding_dating_apps_question": "Which of these apps have you used before?",
+  "onboarding_next_button_label": "Next",
+  "onboarding_error_fill_required_fields": "Please fill in all required fields",
+  "onboarding_error_invalid_participant": "Unfortunately, you are not eligible to participate in this study",
+
+  "swiping_error_answer_all_questions": "Please answer all questions",
+  "swiping_about_me_section_label": "About me",
+  "swiping_relationship_section_label": "Looking for",
+  "swiping_hobbies_section_label": "Hobbies",
+
+  "thank_you_title": "Thank you for your participation!",
+  "thank_you_info": "Below is your participant id. Please save this if you wish to withdraw from the study. You can contact us at pbh469@alumni.ku.dk or zbv742@alumni.ku.dk if you want to withdraw or have any questions!",
+  "thank_you_participant_id": "Your participant id: ",
+
+  "error_title": "Something went wrong",
+  "error_subtitle": "Try again later",
+
+  "initializing_profile": "Initializing profile",
+  "defining_preferences": "Defining preferences",
+  "setting_boundaries": "Setting boundaries",
+  "mapping_persona": "Mapping persona",
+  "configuring_traits": "Configuring traits",
+  "personalizing_experience": "Personalizing experience",
+  "establishing_identity": "Establishing identity",
+
+  "scanning_pool": "Scanning match pool",
+  "filtering_profiles": "Filtering profiles",
+  "calculating_overlap": "Calculating overlap",
+  "matching_preferences": "Matching preferences",
+  "estimating_compatibility": "Estimating compatibility",
+  "refining_matches": "Refining matches",
+  "loading_connections": "Loading connections"
+}

@@ -121,3 +121,32 @@ button:focus-visible {
 .error_icon {
   color: var(--color-error);
 }
+
+.slider-container {
+  margin-top: 16px; /* equivalent to mt: 3 in sx */
+}
+
+/* Slider thumb color */
+.slider-thumb {
+  color: var(--color-primary, #AD9BF6); /* Use CSS variable or fallback */
+}
+
+/* Slider track color */
+.slider-track {
+  color: var(--color-primary, #AD9BF6); /* Use CSS variable or fallback */
+}
+
+/* Slider rail color */
+.slider-rail {
+  color: #ccc;
+}
+
+/* Slider value label styling */
+.slider-valueLabel {
+  background-color: var(--color-primary, #AD9BF6); /* Use CSS variable or fallback */
+  color: #fff;
+}
+
+.on-surface-text {
+  color: var(--color-on-surface);
+}

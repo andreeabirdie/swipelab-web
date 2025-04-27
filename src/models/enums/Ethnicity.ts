@@ -1,6 +1,8 @@
 export enum Ethnicity {
-    Asian,
-    Black,
-    Latino,
-    White
+    Asian="Asian",
+    Black="Black",
+    Latino="Latino",
+    Caucasian="Caucasian",
+    MixedRace="Mixed Race",
+    Other="Other"
 }

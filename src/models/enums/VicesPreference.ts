@@ -1,4 +1,4 @@
-export enum ActivityOftenRate {
+export enum VicesPreference {
     Never,
     Sometimes,
     Often,

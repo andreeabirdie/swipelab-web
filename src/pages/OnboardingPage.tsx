@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from "react-router-dom";
+import {OnboardingForm} from "../components/OnboardingForm.tsx";
 
 const OnboardingPage : React.FC = () => (
     <>
@@ -8,6 +9,7 @@ const OnboardingPage : React.FC = () => (
             <li><Link to="/postswipe">Go to Post Swipe page</Link></li>
             <li><Link to="/thankyou">Go to Thank You page</Link></li>
         </ul>
+        <OnboardingForm />
     </>
 )
 
