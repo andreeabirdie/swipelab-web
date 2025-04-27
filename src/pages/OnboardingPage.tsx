@@ -10,21 +10,23 @@ import interactionService from "../services/InteractionService.ts";
 import ThankYouPage from "./ThankYouPage.tsx";
 import {mapOnboardingAnswersToParticipant, OnboardingAnswers} from "../models/OnboardingAnswers.ts";
 import SwipePage from "./SwipePage.tsx";
+import {ExperimentState} from "../models/enums/ExperimentState";
+import FinalFormPage from "./FinalFormPage";
 
 const OnboardingPage: React.FC = () => {
     const [uiState, setUiState] = useState<OnboardingUiState>({status: 'loading'});
 
+    const getExperimentId = () => {
+        const experiment = localStorageService.get<Experiment>('current_experiment');
+
+        if (experiment == null) {
+            setUiState({status: 'content'})
+        } else {
+            fetchExperiment(experiment.experimentId)
+        }
+    };
+
     useEffect(() => {
-        const getExperimentId = () => {
-            const experiment = localStorageService.get<Experiment>('current_experiment');
-
-            if (experiment == null) {
-                setUiState({status: 'content'})
-            } else {
-                fetchExperiment(experiment.experimentId)
-            }
-        };
-
         getExperimentId();
     }, []);
 
@@ -32,10 +34,16 @@ const OnboardingPage: React.FC = () => {
         try {
             const experiment = await interactionService.getExperiment(experimentId);
             localStorageService.set<Experiment>('current_experiment', experiment);
-            if (experiment.state == 2) {
-                setUiState({status: 'go_to_thank_you', experiment: experiment});
-            } else {
-                setUiState({status: 'go_to_swiping', experiment: experiment});
+            switch (experiment.state){
+                case ExperimentState.SWIPING:
+                    setUiState({status: 'go_to_swiping', experiment: experiment});
+                    break;
+                case ExperimentState.FINAL_FORM:
+                    setUiState({status: 'go_to_final_form', experiment})
+                    break;
+                case ExperimentState.COMPLETE:
+                    setUiState({status: 'go_to_thank_you', experiment: experiment});
+                    break;
             }
         } catch (err) {
             console.error(err);
@@ -70,8 +78,9 @@ const OnboardingPage: React.FC = () => {
         />;
     }
     if (uiState.status === 'error') return <ErrorCard/>;
-    if (uiState.status === 'go_to_thank_you') return <ThankYouPage experiment={uiState.experiment} />
     if (uiState.status === 'go_to_swiping') return <SwipePage experiment={uiState.experiment} />
+    if (uiState.status === 'go_to_final_form') return <FinalFormPage experimentId={uiState.experiment.experimentId} />
+    if (uiState.status === 'go_to_thank_you') return <ThankYouPage experiment={uiState.experiment} />
 
     return <OnboardingForm onSubmit={createExperiment}/>
 }

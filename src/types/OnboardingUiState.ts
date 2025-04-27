@@ -5,4 +5,5 @@ export type OnboardingUiState =
     | { status: 'content' }
     | { status: 'go_to_thank_you', experiment: Experiment }
     | { status: 'go_to_swiping', experiment: Experiment }
+    | { status: 'go_to_final_form', experiment: Experiment }
     | { status: 'error' };
