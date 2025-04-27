@@ -80,7 +80,7 @@ const OnboardingPage: React.FC = () => {
     if (uiState.status === 'error') return <ErrorCard/>;
     if (uiState.status === 'go_to_swiping') return <SwipePage experiment={uiState.experiment} />
     if (uiState.status === 'go_to_final_form') return <FinalFormPage experimentId={uiState.experiment.experimentId} />
-    if (uiState.status === 'go_to_thank_you') return <ThankYouPage experiment={uiState.experiment} />
+    if (uiState.status === 'go_to_thank_you') return <ThankYouPage experimentId={uiState.experiment.experimentId} />
 
     return <OnboardingForm onSubmit={createExperiment}/>
 }

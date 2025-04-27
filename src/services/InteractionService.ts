@@ -32,7 +32,7 @@ class InteractionService {
         return response.data;
     }
 
-    async completeExperiment(experimentId: string, data: QuestionAnswerItemRequest[]): Promise<void> {
+    async completeExperiment(experimentId: string, data: QuestionAnswerItemRequest[]): Promise<Experiment> {
         const response = await axios.post<Experiment>(`${this.baseUrl}/experiment/${experimentId}/complete`, data);
         return response.data;
     }

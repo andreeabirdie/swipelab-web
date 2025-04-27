@@ -37,11 +37,11 @@ const EthnicityRadioGroup: React.FC<EthnicityRadioGroupProps> = ({
                     setEthnicity(e.target.value);
                 }}
                 sx={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(2, 1fr)',
+                    display: 'flex',
                     gap: 2,
-                    justifyItems: 'center',
-                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    flexDirection: 'row',
+                    justifyContent: 'space-around'
                 }}
             >
                 {ethnicityOptions.map((ethnicity: Ethnicity) => {
@@ -53,7 +53,7 @@ const EthnicityRadioGroup: React.FC<EthnicityRadioGroupProps> = ({
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    gap: 1, // spacing between radio and text field
+                                    gap: 1
                                 }}
                             >
                                 <FormControlLabel
@@ -69,7 +69,10 @@ const EthnicityRadioGroup: React.FC<EthnicityRadioGroupProps> = ({
                                     onChange={handleChange}
                                     size="small"
                                     disabled={ethnicity !== Ethnicity.Other}
-                                    sx={{ flexGrow: 1 }}
+                                    sx={{
+                                        flexGrow: 1,
+                                        minWidth: '150px'
+                                    }}
                                 />
                             </Box>
                         );
@@ -80,6 +83,9 @@ const EthnicityRadioGroup: React.FC<EthnicityRadioGroupProps> = ({
                                 value={ethnicity}
                                 control={<Radio />}
                                 label={ethnicity}
+                                sx={{
+                                    flexShrink: 0,
+                                }}
                             />
                         );
                     }

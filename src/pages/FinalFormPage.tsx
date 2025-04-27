@@ -43,7 +43,7 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
             answers: Yup.object().test(
                 "individual-answers",
                 "",
-                function (answers) {
+                function (answers: Record<number, string>) {
                     if (!questions) return false;
                     const errors: Record<string, string> = {};
                     questions.forEach((q) => {
@@ -52,7 +52,7 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
                         }
                     });
                     if (Object.keys(errors).length > 0) {
-                        throw this.createError({ path: "answers", value: answers, message: errors });
+                        throw this.createError({ path: "answers", message: errors });
                     }
                     return true;
                 }
@@ -91,7 +91,7 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
     }
 
     if (submitted) {
-        return <ThankYouPage/>;
+        return <ThankYouPage experimentId={experimentId}/>;
     }
 
     if (!questions || questions.length === 0 || isError) {
