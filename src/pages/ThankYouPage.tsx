@@ -1,8 +1,8 @@
 import React from "react";
 import {useThankYouViewModel} from "../hooks/useThankYouViewModel.ts";
 import {ErrorCard} from "../components/ErrorCard.tsx";
-import {LoadingContent} from "../components/LoadingContent.tsx";
 import strings from "../strings.json"
+import LoadingContent from "../components/LoadingContent.tsx";
 
 const ThankYouPage: React.FC = () => {
     const uiState = useThankYouViewModel();

@@ -11,11 +11,11 @@ import {RelationshipStatus} from "../models/enums/RelationshipStatus.ts";
 import {Gender} from "../models/enums/Gender.ts";
 import * as Yup from 'yup';
 import { differenceInYears } from 'date-fns';
-import {renderDatingAppsCheckboxGroup} from "./DatingAppsCheckBoxGroup.tsx";
-import { SelectField } from './SelectField.tsx';
-import { renderEthnicityRadioGroup } from './EthnicityRadioGroup.tsx';
-import {renderAgeSlider} from "./AgeSlider.tsx";
+import SelectField from './SelectField.tsx';
+import AgeSlider from "./AgeSlider.tsx";
 import {OnboardingAnswers} from "../models/OnboardingAnswers.ts";
+import DatingAppsCheckboxGroup from "./DatingAppsCheckBoxGroup.tsx";
+import EthnicityRadioGroup from "./EthnicityRadioGroup.tsx";
 
 const initialValues : OnboardingAnswers = {
     dateOfBirth: '',
@@ -49,8 +49,8 @@ const validationSchema = Yup.object({
     knownDatingApps: Yup.array().min(1, 'At least one box must be ticked')
 });
 
-export function OnboardingForm() {
-    const otherEthnicityRef = useRef<HTMLInputElement>(null);
+const OnboardingForm : React.FC = () => {
+    const otherEthnicityRef = useRef<HTMLInputElement | null>(null);
 
     const [ethnicity, setEthnicity] = useState('')
 
@@ -65,7 +65,6 @@ export function OnboardingForm() {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-                console.log('clicked submit');
                 console.log('Submitted', values);
             }}
         >
@@ -105,16 +104,16 @@ export function OnboardingForm() {
                         <Box textAlign="justify"
                              className="on-surface-text">{strings.onboarding_ethnicity_question}</Box>
 
-                        {renderEthnicityRadioGroup({
-                            name: 'ethnicity',
-                            value: values.ethnicity,
-                            setEthnicity,
-                            handleChange,
-                            errors,
-                            touched,
-                            otherEthnicityRef,
-                            ethnicityOptions: Object.values(Ethnicity),
-                        })}
+                        <EthnicityRadioGroup
+                            name={'ethnicity'}
+                            value={values.ethnicity}
+                            setEthnicity={setEthnicity}
+                            handleChange={handleChange}
+                            errors={errors.ethnicity}
+                            touched={touched.ethnicity}
+                            otherEthnicityRef={otherEthnicityRef}
+                            ethnicityOptions={Object.values(Ethnicity)}
+                        />
 
 
                         <SelectField
@@ -159,11 +158,11 @@ export function OnboardingForm() {
                             options={Object.values(InterestedInGender)}
                         />
 
-                        {renderAgeSlider({
-                            value: values.ageRange,
-                            onChange: (newValue: any) => setFieldValue('ageRange', newValue),
-                            strings,
-                        })}
+                        <AgeSlider
+                            value={values.ageRange}
+                            setFieldValue={setFieldValue}
+                            label={strings.onboarding_ages_question}
+                        />
 
                         <SelectField
                             name={'experience'}
@@ -175,15 +174,15 @@ export function OnboardingForm() {
                             options={Object.values(UsageOfDatingApps)}
                         />
 
-                        {renderDatingAppsCheckboxGroup({
-                            name: 'knownDatingApps',
-                            label: strings.onboarding_dating_apps_question,
-                            values,
-                            setFieldValue,
-                            options: Object.values(DatingApps),
-                            errors,
-                            touched,
-                        })}
+                        <DatingAppsCheckboxGroup
+                            name={'knownDatingApps'}
+                            label={strings.onboarding_dating_apps_question}
+                            values={values.knownDatingApps}
+                            setFieldValue={setFieldValue}
+                            errors={errors.knownDatingApps}
+                            touched={touched.knownDatingApps}
+                            options={Object.values(DatingApps)}
+                        />
 
                         <Button variant="contained" color="primary" type="submit">
                             {strings.onboarding_next_button_label}
@@ -194,3 +193,5 @@ export function OnboardingForm() {
         </Formik>
     );
 }
+
+export default OnboardingForm;

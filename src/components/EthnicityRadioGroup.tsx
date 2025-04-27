@@ -1,23 +1,37 @@
 import {Box, FormControl, FormControlLabel, FormHelperText, Radio, RadioGroup, TextField} from "@mui/material";
-import React from "react";
+import React, {ChangeEvent} from "react";
 import { Ethnicity } from "../models/enums/Ethnicity";
 
-export function renderEthnicityRadioGroup({
-                                       name,
-                                       value,
-                                       setEthnicity,
-                                       handleChange,
-                                       errors,
-                                       touched,
-                                       otherEthnicityRef,
-                                       ethnicityOptions,
-                                   }: any) {
+type EthnicityRadioGroupProps = {
+    name: string,
+    ethnicityValue: string,
+    otherEthnicityValue: string,
+    setEthnicity: (value: string) => void,
+    handleChange: {(e: ChangeEvent<any>): void;
+        <T = string | ChangeEvent<any>>(field: T): T extends ChangeEvent<any> ? void : (e: string | ChangeEvent<any>) => void;}
+    errors: string | undefined,
+    touched: boolean | undefined,
+    otherEthnicityRef: React.RefObject<HTMLInputElement | null>,
+    ethnicityOptions: Ethnicity[]
+}
+
+const EthnicityRadioGroup: React.FC<EthnicityRadioGroupProps> = ({
+                                                                     name,
+                                                                     ethnicityValue,
+                                                                     otherEthnicityValue,
+                                                                     setEthnicity,
+                                                                     handleChange,
+                                                                     errors,
+                                                                     touched,
+                                                                     otherEthnicityRef,
+                                                                     ethnicityOptions,
+                                                                 }) => {
     return (
-        <FormControl fullWidth error={Boolean(errors[name] && touched[name])}>
+        <FormControl fullWidth error={Boolean(errors && touched)}>
             <RadioGroup
                 aria-labelledby="ethnicity-group"
                 name={name}
-                value={value}
+                value={ethnicityValue}
                 onChange={(e) => {
                     handleChange(e);
                     setEthnicity(e.target.value);
@@ -51,10 +65,10 @@ export function renderEthnicityRadioGroup({
                                 <TextField
                                     inputRef={otherEthnicityRef}
                                     name="otherEthnicity"
-                                    value={value}
+                                    value={otherEthnicityValue}
                                     onChange={handleChange}
                                     size="small"
-                                    disabled={value !== Ethnicity.Other}
+                                    disabled={ethnicity !== Ethnicity.Other}
                                     sx={{ flexGrow: 1 }}
                                 />
                             </Box>
@@ -71,7 +85,9 @@ export function renderEthnicityRadioGroup({
                     }
                 })}
             </RadioGroup>
-            <FormHelperText>{touched[name] && errors[name]}</FormHelperText>
+            <FormHelperText>{touched && errors}</FormHelperText>
         </FormControl>
     );
 }
+
+export default EthnicityRadioGroup;
