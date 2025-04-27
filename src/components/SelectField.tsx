@@ -12,7 +12,7 @@ type SelectFieldProps = {
     options: string[]
 }
 
-export function SelectField({name, label, value, handleChange, errors, touched, options}: SelectFieldProps) {
+const SelectField : React.FC<SelectFieldProps> = ({name, label, value, handleChange, errors, touched, options})=> {
     return (
         <FormControl fullWidth error={Boolean(errors && touched)}>
             <InputLabel id={`select-${name}`}>{label}</InputLabel>
@@ -33,3 +33,5 @@ export function SelectField({name, label, value, handleChange, errors, touched, 
         </FormControl>
     );
 }
+
+export default SelectField;

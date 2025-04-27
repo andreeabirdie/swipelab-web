@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 
 export function useCssVariable(variableName: string, fallback: string) {
     const [value, setValue] = useState(fallback);

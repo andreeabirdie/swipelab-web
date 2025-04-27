@@ -1,5 +1,5 @@
-import {Formik, Form} from 'formik';
-import {TextField, Button, Box} from '@mui/material';
+import {Form, Formik} from 'formik';
+import {Box, Button, TextField} from '@mui/material';
 import strings from '../strings.json';
 import React, {useEffect, useRef, useState} from 'react';
 import {DatingApps} from "../models/enums/DatingApps.ts";
@@ -10,47 +10,19 @@ import {InterestedInGender} from "../models/enums/InterestedInGender.ts";
 import {RelationshipStatus} from "../models/enums/RelationshipStatus.ts";
 import {Gender} from "../models/enums/Gender.ts";
 import * as Yup from 'yup';
-import { differenceInYears } from 'date-fns';
-import {renderDatingAppsCheckboxGroup} from "./DatingAppsCheckBoxGroup.tsx";
-import { SelectField } from './SelectField.tsx';
-import { renderEthnicityRadioGroup } from './EthnicityRadioGroup.tsx';
-import {renderAgeSlider} from "./AgeSlider.tsx";
+import {differenceInYears} from 'date-fns';
+import SelectField from './SelectField.tsx';
+import AgeSlider from "./AgeSlider.tsx";
 import {OnboardingAnswers} from "../models/OnboardingAnswers.ts";
+import DatingAppsCheckboxGroup from "./DatingAppsCheckBoxGroup.tsx";
+import EthnicityRadioGroup from "./EthnicityRadioGroup.tsx";
 
-const initialValues : OnboardingAnswers = {
-    dateOfBirth: '',
-    ethnicity: '',
-    otherEthnicity: '',
-    countryOfResidence: '',
-    gender: '',
-    relationshipStatus: '',
-    interestedInGender: '',
-    ageRange: [20, 30],
-    experience: '',
-    knownDatingApps: [] as string[],
-};
+type OnboardingFormProps = {
+    onSubmit: (answers: OnboardingAnswers) => void
+}
 
-const validationSchema = Yup.object({
-    dateOfBirth: Yup.string()
-        .required('Required')
-        .test('is-18', 'Unfortunately, you are not eligible', (value) => {
-            if (!value) return false;
-            return differenceInYears(new Date(), new Date(value)) >= 18;
-        }),
-    ethnicity: Yup.string().required('Required'),
-    countryOfResidence: Yup.string().required('Required'),
-    gender: Yup.string().required('Required'),
-    relationshipStatus: Yup.string().required('Required'),
-    interestedInGender: Yup.string().required('Required'),
-    ageRange: Yup.array().required('Required'),
-    experience: Yup.string()
-        .required('Required')
-        .notOneOf([UsageOfDatingApps.NeverUsed], 'Unfortunately, you are not eligible'),
-    knownDatingApps: Yup.array().min(1, 'At least one box must be ticked')
-});
-
-export function OnboardingForm() {
-    const otherEthnicityRef = useRef<HTMLInputElement>(null);
+const OnboardingForm : React.FC<OnboardingFormProps> = ({onSubmit}) => {
+    const otherEthnicityRef = useRef<HTMLInputElement | null>(null);
 
     const [ethnicity, setEthnicity] = useState('')
 
@@ -60,13 +32,45 @@ export function OnboardingForm() {
         }
     }, [ethnicity]);
 
+    const validationSchema = Yup.object({
+        dateOfBirth: Yup.string()
+            .required('Required')
+            .test('is-18', "Unfortunately, you are not eligible for the study. Thank you for your time!", (value) => {
+                if (!value) return false;
+                return differenceInYears(new Date(), new Date(value)) >= 18;
+            }),
+        ethnicity: Yup.string().required('Required'),
+        countryOfResidence: Yup.string().required('Required'),
+        gender: Yup.string().required('Required'),
+        relationshipStatus: Yup.string().required('Required'),
+        interestedInGender: Yup.string().required('Required'),
+        ageRange: Yup.array().required('Required'),
+        experience: Yup.string()
+            .required('Required')
+            .notOneOf([UsageOfDatingApps.NeverUsed], "Unfortunately, you are not eligible for the study. Thank you for your time!"),
+        knownDatingApps: Yup.array().min(1, 'At least one box must be ticked')
+    });
+
+    const initialValues : OnboardingAnswers = {
+        dateOfBirth: '',
+        ethnicity: '',
+        otherEthnicity: '',
+        countryOfResidence: '',
+        gender: '',
+        relationshipStatus: '',
+        interestedInGender: '',
+        ageRange: [20, 30],
+        experience: '',
+        knownDatingApps: [] as string[],
+    };
+
     return (
         <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-                console.log('clicked submit');
                 console.log('Submitted', values);
+                onSubmit(values)
             }}
         >
             {({values, handleChange, setFieldValue, errors, touched}) => (
@@ -105,16 +109,17 @@ export function OnboardingForm() {
                         <Box textAlign="justify"
                              className="on-surface-text">{strings.onboarding_ethnicity_question}</Box>
 
-                        {renderEthnicityRadioGroup({
-                            name: 'ethnicity',
-                            value: values.ethnicity,
-                            setEthnicity,
-                            handleChange,
-                            errors,
-                            touched,
-                            otherEthnicityRef,
-                            ethnicityOptions: Object.values(Ethnicity),
-                        })}
+                        <EthnicityRadioGroup
+                            name={'ethnicity'}
+                            ethnicityValue={values.ethnicity}
+                            otherEthnicityValue={values.otherEthnicity}
+                            setEthnicity={setEthnicity}
+                            handleChange={handleChange}
+                            errors={errors.ethnicity}
+                            touched={touched.ethnicity}
+                            otherEthnicityRef={otherEthnicityRef}
+                            ethnicityOptions={Object.values(Ethnicity)}
+                        />
 
 
                         <SelectField
@@ -159,11 +164,11 @@ export function OnboardingForm() {
                             options={Object.values(InterestedInGender)}
                         />
 
-                        {renderAgeSlider({
-                            value: values.ageRange,
-                            onChange: (newValue: any) => setFieldValue('ageRange', newValue),
-                            strings,
-                        })}
+                        <AgeSlider
+                            value={values.ageRange}
+                            setFieldValue={setFieldValue}
+                            label={strings.onboarding_ages_question}
+                        />
 
                         <SelectField
                             name={'experience'}
@@ -175,15 +180,15 @@ export function OnboardingForm() {
                             options={Object.values(UsageOfDatingApps)}
                         />
 
-                        {renderDatingAppsCheckboxGroup({
-                            name: 'knownDatingApps',
-                            label: strings.onboarding_dating_apps_question,
-                            values,
-                            setFieldValue,
-                            options: Object.values(DatingApps),
-                            errors,
-                            touched,
-                        })}
+                        <DatingAppsCheckboxGroup
+                            name={'knownDatingApps'}
+                            label={strings.onboarding_dating_apps_question}
+                            values={values.knownDatingApps}
+                            setFieldValue={setFieldValue}
+                            errors={errors.knownDatingApps}
+                            touched={touched.knownDatingApps}
+                            options={Object.values(DatingApps)}
+                        />
 
                         <Button variant="contained" color="primary" type="submit">
                             {strings.onboarding_next_button_label}
@@ -194,3 +199,5 @@ export function OnboardingForm() {
         </Formik>
     );
 }
+
+export default OnboardingForm;

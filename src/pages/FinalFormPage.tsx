@@ -4,15 +4,11 @@ import interactionService from "../services/InteractionService";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import FormHelperText from "@mui/material/FormHelperText";
 import {QuestionAnswerItemRequest} from "../models/requests/QuestionAnswerItemRequest";
 import ThankYouPage from "./ThankYouPage";
-import {LoadingContent} from "../components/LoadingContent";
+import LoadingContent from "../components/LoadingContent";
+import SelectField from "../components/SelectField";
 
 type FinalFormProps = {
     experimentId: string
@@ -22,19 +18,18 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [submitted, setSubmitted] = useState<boolean>(false);
 
+    const fetchQuestions = async () => {
+        try {
+            const fetchedQuestions = await interactionService.getFinalQuestions(experimentId);
+            setQuestions(fetchedQuestions);
+        } catch (error) {
+            console.error("Failed to fetch questions:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
     useEffect(() => {
-        const fetchQuestions = async () => {
-            try {
-                const fetchedQuestions = await interactionService.getFinalQuestions(experimentId);
-                setQuestions(fetchedQuestions);
-            } catch (error) {
-                console.error("Failed to fetch questions:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchQuestions();
+        fetchQuestions().then(_ => {});
     }, [experimentId]);
 
     const formik = useFormik({
@@ -60,7 +55,13 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
                 }
             ),
         }),
-        onSubmit: async (values) => {
+        onSubmit: async (values, { setSubmitting, validateForm }) => {
+            const formErrors = await validateForm();
+            if (Object.keys(formErrors).length > 0) {
+                setSubmitting(false);
+                return;
+            }
+
             const payload: QuestionAnswerItemRequest[] = Object.entries(values.answers).map(([key, value]) => ({
                 questionNumber: Number(key),
                 answer: value,
@@ -77,7 +78,8 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
         },
         enableReinitialize: true,
         validateOnChange: false,
-        validateOnBlur: false
+        validateOnBlur: false,
+        validateOnMount: true
     });
 
     if (loading) {
@@ -94,33 +96,27 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
 
     return (
         <form onSubmit={formik.handleSubmit}>
-            <div>Congratilustions! You are done. We have a few questions for you:</div>
+            <div>Congratulations! You are done. We have a few questions for you:</div>
             {questions.map((question, index) => {
                 const fieldName = `answers.${question.questionNumber}`;
-                const error = formik.errors.answers && typeof formik.errors.answers === 'object' ? formik.errors.answers[question.questionNumber] : undefined;
+                const error = formik.errors.answers && typeof formik.errors.answers === 'object'
+                    ? formik.errors.answers[question.questionNumber]
+                    : undefined;
 
                 return (
                     <div key={question.questionNumber} style={{ marginBottom: "20px" }}>
                         <h3>Question {index + 1}</h3>
                         <p>{question.text}</p>
                         {question.options && question.options.length > 0 ? (
-                            <FormControl fullWidth error={Boolean(error)}>
-                                <InputLabel>Select an option</InputLabel>
-                                <Select
-                                    label="Select an option"
-                                    name={fieldName}
-                                    value={formik.values.answers[question.questionNumber] || ""}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                >
-                                    {question.options.map((option, idx) => (
-                                        <MenuItem key={idx} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {error && <FormHelperText>{error}</FormHelperText>}
-                            </FormControl>
+                            <SelectField
+                                name={fieldName}
+                                label="Select an option"
+                                value={formik.values.answers[question.questionNumber] || ""}
+                                handleChange={formik.handleChange}
+                                errors={error}
+                                touched={Boolean(error)}
+                                options={question.options}
+                            />
                         ) : (
                             <TextField
                                 fullWidth

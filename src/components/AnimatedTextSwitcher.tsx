@@ -1,12 +1,11 @@
-import {useEffect, useState} from 'react';
-import {motion, AnimatePresence} from 'framer-motion';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {AnimatePresence, motion} from 'framer-motion';
 
 interface AnimatedTextSwitcherProps {
     messages: string[];
 }
 
-export function AnimatedTextSwitcher({messages}: AnimatedTextSwitcherProps) {
+const AnimatedTextSwitcher : React.FC<AnimatedTextSwitcherProps>  = ({messages})=>  {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [visible, setVisible] = useState(false);
 
@@ -51,3 +50,5 @@ export function AnimatedTextSwitcher({messages}: AnimatedTextSwitcherProps) {
         </div>
     );
 }
+
+export default AnimatedTextSwitcher;
