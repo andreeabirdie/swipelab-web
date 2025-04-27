@@ -1,15 +1,19 @@
 {
   "name": "swipelab-web",
+  "homepage": "https://andreeabirdie.github.io/swipelab-web",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
     "@types/prop-types": "^15.7.14",
+    "gh-pages": "^6.3.0",
     "typescript": "~5.7.2",
     "vite": "^6.3.1"
   },
