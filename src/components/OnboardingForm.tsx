@@ -106,7 +106,8 @@ const OnboardingForm : React.FC = () => {
 
                         <EthnicityRadioGroup
                             name={'ethnicity'}
-                            value={values.ethnicity}
+                            ethnicityValue={values.ethnicity}
+                            otherEthnicityValue={values.otherEthnicity}
                             setEthnicity={setEthnicity}
                             handleChange={handleChange}
                             errors={errors.ethnicity}
