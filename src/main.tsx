@@ -10,6 +10,7 @@ import TestExperimentPage from "./pages/TestExperimentPage";
 import CreateExperimentPage from "./pages/CreateExperimentPage";
 import {createTheme, ThemeProvider } from "@mui/material";
 import {themeOptions} from "./themeOptions.ts";
+import FinalFormPage from "./pages/FinalFormPage";
 
 const App: React.FC = () => {
     const theme = createTheme(themeOptions)
@@ -23,6 +24,7 @@ const App: React.FC = () => {
                     <Route path="/thankyou" element={<ThankYou/>}/>
                     <Route path="/tests/experiment" element={<TestExperimentPage/>}/>
                     <Route path="/tests/create-experiment" element={<CreateExperimentPage/>}/>
+                    <Route path="/tests/final-form" element={<FinalFormPage experimentId={'65b5ed55-b3c1-4ea7-a04d-070a22becc58'}/>}/>
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>
