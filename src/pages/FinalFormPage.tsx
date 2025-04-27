@@ -9,11 +9,13 @@ import {QuestionAnswerItemRequest} from "../models/requests/QuestionAnswerItemRe
 import ThankYouPage from "./ThankYouPage";
 import LoadingContent from "../components/LoadingContent";
 import SelectField from "../components/SelectField";
+import {ErrorCard} from "../components/ErrorCard";
 
 type FinalFormProps = {
     experimentId: string
 }
 const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
+    const [isError, setIsError] = useState<boolean>(false);
     const [questions, setQuestions] = useState<Question[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [submitted, setSubmitted] = useState<boolean>(false);
@@ -24,6 +26,7 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
             setQuestions(fetchedQuestions);
         } catch (error) {
             console.error("Failed to fetch questions:", error);
+            setIsError(true);
         } finally {
             setLoading(false);
         }
@@ -74,6 +77,7 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
                 setSubmitted(true);
             } catch (error) {
                 console.error("Failed to complete experiment:", error);
+                setIsError(true);
             }
         },
         enableReinitialize: true,
@@ -90,8 +94,8 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
         return <ThankYouPage/>;
     }
 
-    if (!questions || questions.length === 0) {
-        return <div>No questions found.</div>;
+    if (!questions || questions.length === 0 || isError) {
+        return <ErrorCard/>
     }
 
     return (
