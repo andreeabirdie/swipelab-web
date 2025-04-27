@@ -12,11 +12,12 @@ import {Gender} from "../models/enums/Gender.ts";
 import * as Yup from 'yup';
 import { differenceInYears } from 'date-fns';
 import {renderDatingAppsCheckboxGroup} from "./DatingAppsCheckBoxGroup.tsx";
-import { renderSelectField } from './SelectField.tsx';
+import { SelectField } from './SelectField.tsx';
 import { renderEthnicityRadioGroup } from './EthnicityRadioGroup.tsx';
 import {renderAgeSlider} from "./AgeSlider.tsx";
+import {OnboardingAnswers} from "../models/OnboardingAnswers.ts";
 
-const initialValues = {
+const initialValues : OnboardingAnswers = {
     dateOfBirth: '',
     ethnicity: '',
     otherEthnicity: '',
@@ -64,6 +65,7 @@ export function OnboardingForm() {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => {
+                console.log('clicked submit');
                 console.log('Submitted', values);
             }}
         >
@@ -114,63 +116,64 @@ export function OnboardingForm() {
                             ethnicityOptions: Object.values(Ethnicity),
                         })}
 
-                        {renderSelectField({
-                            name: 'countryOfResidence',
-                            label: strings.onboarding_residence_country_label,
-                            values,
-                            handleChange,
-                            errors,
-                            touched,
-                            options: Object.values(Country),
-                        })}
 
-                        {renderSelectField({
-                            name: 'gender',
-                            label: strings.onboarding_gender_label,
-                            values,
-                            handleChange,
-                            errors,
-                            touched,
-                            options: Object.values(Gender),
-                        })}
+                        <SelectField
+                            name={'countryOfResidence'}
+                            label={strings.onboarding_residence_country_label}
+                            value={values.countryOfResidence}
+                            handleChange={handleChange}
+                            errors={errors.countryOfResidence}
+                            touched={touched.countryOfResidence}
+                            options={Object.values(Country)}
+                        />
 
-                        {renderSelectField({
-                            name: 'relationshipStatus',
-                            label: strings.onboarding_relationship_label,
-                            values,
-                            handleChange,
-                            errors,
-                            touched,
-                            options: Object.values(RelationshipStatus),
-                        })}
+                        <SelectField
+                            name={'gender'}
+                            label={strings.onboarding_gender_label}
+                            value={values.gender}
+                            handleChange={handleChange}
+                            errors={errors.gender}
+                            touched={touched.gender}
+                            options={Object.values(Gender)}
+                        />
+
+                        <SelectField
+                            name={'relationshipStatus'}
+                            label={strings.onboarding_relationship_label}
+                            value={values.relationshipStatus}
+                            handleChange={handleChange}
+                            errors={errors.relationshipStatus}
+                            touched={touched.relationshipStatus}
+                            options={Object.values(RelationshipStatus)}
+                        />
 
                         <Box textAlign="justify">{strings.onboarding_relationship_note}</Box>
 
-                        {renderSelectField({
-                            name: 'interestedInGender',
-                            label: strings.onboarding_interested_in_gender_label,
-                            values,
-                            handleChange,
-                            errors,
-                            touched,
-                            options: Object.values(InterestedInGender),
-                        })}
+                        <SelectField
+                            name={'interestedInGender'}
+                            label={strings.onboarding_interested_in_gender_label}
+                            value={values.interestedInGender}
+                            handleChange={handleChange}
+                            errors={errors.interestedInGender}
+                            touched={touched.interestedInGender}
+                            options={Object.values(InterestedInGender)}
+                        />
 
                         {renderAgeSlider({
                             value: values.ageRange,
                             onChange: (newValue: any) => setFieldValue('ageRange', newValue),
                             strings,
                         })}
-                        
-                        {renderSelectField({
-                            name: 'experience',
-                            label: strings.onboarding_dating_experience_question,
-                            values,
-                            handleChange,
-                            errors,
-                            touched,
-                            options: Object.values(UsageOfDatingApps),
-                        })}
+
+                        <SelectField
+                            name={'experience'}
+                            label={strings.onboarding_dating_experience_question}
+                            value={values.experience}
+                            handleChange={handleChange}
+                            errors={errors.experience}
+                            touched={touched.experience}
+                            options={Object.values(UsageOfDatingApps)}
+                        />
 
                         {renderDatingAppsCheckboxGroup({
                             name: 'knownDatingApps',
