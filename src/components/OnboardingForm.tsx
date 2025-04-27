@@ -1,5 +1,5 @@
-import {Formik, Form} from 'formik';
-import {TextField, Button, Box} from '@mui/material';
+import {Form, Formik} from 'formik';
+import {Box, Button, TextField} from '@mui/material';
 import strings from '../strings.json';
 import React, {useEffect, useRef, useState} from 'react';
 import {DatingApps} from "../models/enums/DatingApps.ts";
@@ -10,46 +10,18 @@ import {InterestedInGender} from "../models/enums/InterestedInGender.ts";
 import {RelationshipStatus} from "../models/enums/RelationshipStatus.ts";
 import {Gender} from "../models/enums/Gender.ts";
 import * as Yup from 'yup';
-import { differenceInYears } from 'date-fns';
+import {differenceInYears} from 'date-fns';
 import SelectField from './SelectField.tsx';
 import AgeSlider from "./AgeSlider.tsx";
 import {OnboardingAnswers} from "../models/OnboardingAnswers.ts";
 import DatingAppsCheckboxGroup from "./DatingAppsCheckBoxGroup.tsx";
 import EthnicityRadioGroup from "./EthnicityRadioGroup.tsx";
 
-const initialValues : OnboardingAnswers = {
-    dateOfBirth: '',
-    ethnicity: '',
-    otherEthnicity: '',
-    countryOfResidence: '',
-    gender: '',
-    relationshipStatus: '',
-    interestedInGender: '',
-    ageRange: [20, 30],
-    experience: '',
-    knownDatingApps: [] as string[],
-};
+type OnboardingFormProps = {
+    onSubmit: (answers: OnboardingAnswers) => void
+}
 
-const validationSchema = Yup.object({
-    dateOfBirth: Yup.string()
-        .required('Required')
-        .test('is-18', 'Unfortunately, you are not eligible', (value) => {
-            if (!value) return false;
-            return differenceInYears(new Date(), new Date(value)) >= 18;
-        }),
-    ethnicity: Yup.string().required('Required'),
-    countryOfResidence: Yup.string().required('Required'),
-    gender: Yup.string().required('Required'),
-    relationshipStatus: Yup.string().required('Required'),
-    interestedInGender: Yup.string().required('Required'),
-    ageRange: Yup.array().required('Required'),
-    experience: Yup.string()
-        .required('Required')
-        .notOneOf([UsageOfDatingApps.NeverUsed], 'Unfortunately, you are not eligible'),
-    knownDatingApps: Yup.array().min(1, 'At least one box must be ticked')
-});
-
-const OnboardingForm : React.FC = () => {
+const OnboardingForm : React.FC<OnboardingFormProps> = ({onSubmit}) => {
     const otherEthnicityRef = useRef<HTMLInputElement | null>(null);
 
     const [ethnicity, setEthnicity] = useState('')
@@ -60,12 +32,45 @@ const OnboardingForm : React.FC = () => {
         }
     }, [ethnicity]);
 
+    const validationSchema = Yup.object({
+        dateOfBirth: Yup.string()
+            .required('Required')
+            .test('is-18', "Unfortunately, you are not eligible for the study. Thank you for your time!", (value) => {
+                if (!value) return false;
+                return differenceInYears(new Date(), new Date(value)) >= 18;
+            }),
+        ethnicity: Yup.string().required('Required'),
+        countryOfResidence: Yup.string().required('Required'),
+        gender: Yup.string().required('Required'),
+        relationshipStatus: Yup.string().required('Required'),
+        interestedInGender: Yup.string().required('Required'),
+        ageRange: Yup.array().required('Required'),
+        experience: Yup.string()
+            .required('Required')
+            .notOneOf([UsageOfDatingApps.NeverUsed], "Unfortunately, you are not eligible for the study. Thank you for your time!"),
+        knownDatingApps: Yup.array().min(1, 'At least one box must be ticked')
+    });
+
+    const initialValues : OnboardingAnswers = {
+        dateOfBirth: '',
+        ethnicity: '',
+        otherEthnicity: '',
+        countryOfResidence: '',
+        gender: '',
+        relationshipStatus: '',
+        interestedInGender: '',
+        ageRange: [20, 30],
+        experience: '',
+        knownDatingApps: [] as string[],
+    };
+
     return (
         <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => {
                 console.log('Submitted', values);
+                onSubmit(values)
             }}
         >
             {({values, handleChange, setFieldValue, errors, touched}) => (

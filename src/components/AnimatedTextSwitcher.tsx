@@ -1,6 +1,5 @@
-import {useEffect, useState} from 'react';
-import {motion, AnimatePresence} from 'framer-motion';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {AnimatePresence, motion} from 'framer-motion';
 
 interface AnimatedTextSwitcherProps {
     messages: string[];
