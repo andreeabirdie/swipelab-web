@@ -12,7 +12,7 @@ import {
     FormGroup,
     FormControlLabel,
     RadioGroup,
-    Radio,
+    Radio, FormHelperText,
 } from '@mui/material';
 import strings from '../strings.json';
 import React, {useEffect, useRef, useState} from 'react';
@@ -23,8 +23,8 @@ import {UsageOfDatingApps} from "../models/enums/UsageOfDatingApps.ts";
 import {InterestedInGender} from "../models/enums/InterestedInGender.ts";
 import {RelationshipStatus} from "../models/enums/RelationshipStatus.ts";
 import {Gender} from "../models/enums/Gender.ts";
-// import * as Yup from 'yup';
-// import { differenceInYears } from 'date-fns';
+import * as Yup from 'yup';
+import { differenceInYears } from 'date-fns';
 
 const initialValues = {
     dateOfBirth: '',
@@ -39,29 +39,24 @@ const initialValues = {
     knownDatingApps: [] as string[],
 };
 
-// const validationSchema = Yup.object({
-//     dateOfBirth: Yup.string()
-//         .required('Required')
-//         .test('is-18', 'Unfortunately, you are not eligible', (value) => {
-//             if (!value) return false;
-//             return differenceInYears(new Date(), new Date(value)) >= 18;
-//         }),
-//     ethnicity: Yup.string().required('Required'),
-//     otherEthnicity: Yup.string().when('ethnicity', {
-//         is: (val: string) => val === Ethnicity.Other,
-//         then: Yup.string().required('Required'),
-//         otherwise: Yup.string(),
-//     }),
-//     countryOfResidence: Yup.string().required('Required'),
-//     gender: Yup.string().required('Required'),
-//     relationshipStatus: Yup.string().required('Required'),
-//     interestedInGender: Yup.string().required('Required'),
-//     ageRange: Yup.array().required('Required'),
-//     experience: Yup.string()
-//         .required('Required')
-//         .notOneOf([UsageOfDatingApps.NeverUsed], 'Unfortunately, you are not eligible'),
-//     knownDatingApps: Yup.array().required('Required'),
-// });
+const validationSchema = Yup.object({
+    dateOfBirth: Yup.string()
+        .required('Required')
+        .test('is-18', 'Unfortunately, you are not eligible', (value) => {
+            if (!value) return false;
+            return differenceInYears(new Date(), new Date(value)) >= 18;
+        }),
+    ethnicity: Yup.string().required('Required'),
+    countryOfResidence: Yup.string().required('Required'),
+    gender: Yup.string().required('Required'),
+    relationshipStatus: Yup.string().required('Required'),
+    interestedInGender: Yup.string().required('Required'),
+    ageRange: Yup.array().required('Required'),
+    experience: Yup.string()
+        .required('Required')
+        .notOneOf([UsageOfDatingApps.NeverUsed], 'Unfortunately, you are not eligible'),
+    knownDatingApps: Yup.array().min(1, 'At least one box must be ticked')
+});
 
 export function OnboardingForm() {
     const otherEthnicityRef = useRef<HTMLInputElement>(null);
@@ -77,12 +72,12 @@ export function OnboardingForm() {
     return (
         <Formik
             initialValues={initialValues}
-            // validationSchema={validationSchema}
+            validationSchema={validationSchema}
             onSubmit={(values) => {
                 console.log('Submitted', values);
             }}
         >
-            {({values, handleChange, setFieldValue}) => (
+            {({values, handleChange, setFieldValue, errors, touched}) => (
                 <Form>
                     <Box
                         display="flex"
@@ -111,13 +106,16 @@ export function OnboardingForm() {
                             slotProps={{inputLabel: {shrink: true}}}
                             value={values.dateOfBirth}
                             onChange={handleChange}
-                            // error={Boolean(errors.dateOfBirth && touched.dateOfBirth)}
-                            // helperText={errors.dateOfBirth && touched.dateOfBirth ? errors.dateOfBirth : ''}
+                            error={Boolean(errors.dateOfBirth && touched.dateOfBirth)}
+                            helperText={errors.dateOfBirth && touched.dateOfBirth ? errors.dateOfBirth : ''}
                         />
 
                         <Box textAlign="justify"
                              className="on-surface-text">{strings.onboarding_ethnicity_question}</Box>
-                        <FormControl fullWidth>
+                        <FormControl
+                            fullWidth
+                            error={touched.ethnicity && Boolean(errors.ethnicity)}
+                        >
                             <RadioGroup
                                 aria-labelledby="ethnicity-group"
                                 name="ethnicity"
@@ -172,10 +170,14 @@ export function OnboardingForm() {
                                     }
                                 })}
                             </RadioGroup>
+                            <FormHelperText>{touched.ethnicity && errors.ethnicity}</FormHelperText>
                         </FormControl>
 
                         {/* Country of Residence */}
-                        <FormControl fullWidth>
+                        <FormControl
+                            fullWidth
+                            error={touched.countryOfResidence && Boolean(errors.countryOfResidence)}
+                        >
                             <InputLabel
                                 id="onboarding-select-country">{strings.onboarding_residence_country_label}</InputLabel>
                             <Select
@@ -191,10 +193,14 @@ export function OnboardingForm() {
                                     </MenuItem>
                                 ))}
                             </Select>
+                            <FormHelperText>{touched.countryOfResidence && errors.countryOfResidence}</FormHelperText>
                         </FormControl>
 
                         {/* Gender */}
-                        <FormControl fullWidth>
+                        <FormControl
+                            fullWidth
+                            error={Boolean(errors.gender && touched.gender)}
+                        >
                             <InputLabel id="onboarding-select-gender">{strings.onboarding_gender_label}</InputLabel>
                             <Select
                                 labelId="onboarding-select-gender"
@@ -209,10 +215,14 @@ export function OnboardingForm() {
                                     </MenuItem>
                                 ))}
                             </Select>
+                            <FormHelperText>{touched.gender && errors.gender}</FormHelperText>
                         </FormControl>
 
                         {/* Relationship Status */}
-                        <FormControl fullWidth>
+                        <FormControl
+                            fullWidth
+                            error={Boolean(errors.relationshipStatus && touched.relationshipStatus)}
+                        >
                             <InputLabel
                                 id="onboarding-select-relationship-status">{strings.onboarding_relationship_label}</InputLabel>
                             <Select
@@ -228,13 +238,17 @@ export function OnboardingForm() {
                                     </MenuItem>
                                 ))}
                             </Select>
+                            <FormHelperText>{touched.relationshipStatus && errors.relationshipStatus}</FormHelperText>
                         </FormControl>
 
                         {/* Note */}
                         <Box textAlign="justify">{strings.onboarding_relationship_note}</Box>
 
                         {/* Interested In Gender */}
-                        <FormControl fullWidth>
+                        <FormControl
+                            fullWidth
+                            error={Boolean(errors.interestedInGender && touched.interestedInGender)}
+                        >
                             <InputLabel
                                 id="onboarding-select-interested-gender">{strings.onboarding_interested_in_gender_label}</InputLabel>
                             <Select
@@ -250,6 +264,7 @@ export function OnboardingForm() {
                                     </MenuItem>
                                 ))}
                             </Select>
+                            <FormHelperText>{touched.interestedInGender && errors.interestedInGender}</FormHelperText>
                         </FormControl>
 
                         {/* Age Range Slider */}
@@ -270,7 +285,10 @@ export function OnboardingForm() {
                         </Box>
 
                         {/* Dating Experience */}
-                        <FormControl fullWidth>
+                        <FormControl
+                            fullWidth
+                            error={Boolean(errors.experience && touched.experience)}
+                        >
                             <InputLabel
                                 id="onboarding-select-experience">{strings.onboarding_dating_experience_question}</InputLabel>
                             <Select
@@ -286,6 +304,7 @@ export function OnboardingForm() {
                                     </MenuItem>
                                 ))}
                             </Select>
+                            <FormHelperText>{touched.experience && errors.experience}</FormHelperText>
                         </FormControl>
 
                         {/* Dating Apps Picker */}
@@ -293,7 +312,10 @@ export function OnboardingForm() {
                              className="on-surface-text">{strings.onboarding_dating_apps_question}</Box>
 
                         {/* Dating Apps Picker */}
-                        <FormControl fullWidth>
+                        <FormControl
+                            fullWidth
+                            error={Boolean(errors.knownDatingApps && touched.knownDatingApps)}
+                        >
                             <FormGroup
                                 row
                                 sx={{
@@ -330,6 +352,7 @@ export function OnboardingForm() {
                                     />
                                 ))}
                             </FormGroup>
+                            <FormHelperText>{touched.knownDatingApps && errors.knownDatingApps}</FormHelperText>
                         </FormControl>
 
                         {/* Submit Button */}
