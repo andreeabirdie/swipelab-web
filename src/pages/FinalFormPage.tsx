@@ -13,9 +13,6 @@ import FormHelperText from "@mui/material/FormHelperText";
 import {QuestionAnswerItemRequest} from "../models/requests/QuestionAnswerItemRequest";
 import ThankYouPage from "./ThankYouPage";
 import {LoadingContent} from "../components/LoadingContent";
-import {renderSelectField} from "../components/SelectField";
-import strings from "../strings.json";
-import {Country} from "../models/enums/Country";
 
 type FinalFormProps = {
     experimentId: string
