@@ -1,5 +1,5 @@
 export interface OnboardingAnswers {
-    dateOfBirth: string;
+    dateOfBirth: string; // DateOnly -> string (ISO format like 'YYYY-MM-DD')
     ethnicity: string;
     otherEthnicity: string;
     countryOfResidence: string;

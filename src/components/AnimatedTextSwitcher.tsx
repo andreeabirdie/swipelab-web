@@ -6,7 +6,7 @@ interface AnimatedTextSwitcherProps {
     messages: string[];
 }
 
-export function AnimatedTextSwitcher({messages}: AnimatedTextSwitcherProps) {
+const AnimatedTextSwitcher : React.FC<AnimatedTextSwitcherProps>  = ({messages})=>  {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [visible, setVisible] = useState(false);
 
@@ -51,3 +51,5 @@ export function AnimatedTextSwitcher({messages}: AnimatedTextSwitcherProps) {
         </div>
     );
 }
+
+export default AnimatedTextSwitcher;

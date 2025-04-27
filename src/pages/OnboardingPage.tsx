@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import {OnboardingForm} from "../components/OnboardingForm.tsx";
+import OnboardingForm from "../components/OnboardingForm.tsx";
 
 const OnboardingPage : React.FC = () => (
     <>

@@ -2,9 +2,19 @@ import {Box, Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText}
 import {DatingApps} from "../models/enums/DatingApps.ts";
 import React from "react";
 
-export function renderDatingAppsCheckboxGroup({name, label, values, setFieldValue, options, errors, touched}: any) {
+type DatingAppsCheckBoxGroupProps = {
+    name: string
+    label: string
+    values: string[]
+    setFieldValue: (field: string, value: any) => void;
+    errors: string[] | string | undefined
+    touched: Boolean | undefined
+    options: string[]
+}
+
+const DatingAppsCheckboxGroup: React.FC<DatingAppsCheckBoxGroupProps> = ({name, label, values, setFieldValue, errors, touched, options} ) => {
     return (
-        <FormControl fullWidth error={Boolean(errors[name] && touched[name])}>
+        <FormControl fullWidth error={Boolean(errors && touched)}>
             <Box mb={3} textAlign="center" className="on-surface-text">{label}</Box>
             <FormGroup row sx={{justifyContent: 'center', alignItems: 'center'}}>
                 {options.map((option: string) => (
@@ -12,19 +22,19 @@ export function renderDatingAppsCheckboxGroup({name, label, values, setFieldValu
                         key={option}
                         control={
                             <Checkbox
-                                checked={values[name].includes(option)}
+                                checked={values.includes(option)}
                                 onChange={(e) => {
                                     if (e.target.checked) {
                                         if (option === DatingApps.None) {
                                             setFieldValue(name, [DatingApps.None]);
                                         } else {
                                             setFieldValue(name, [
-                                                ...values[name].filter((a: string) => a !== DatingApps.None),
+                                                ...values.filter((a: string) => a !== DatingApps.None),
                                                 option,
                                             ]);
                                         }
                                     } else {
-                                        setFieldValue(name, values[name].filter((a: string) => a !== option));
+                                        setFieldValue(name, values.filter((a: string) => a !== option));
                                     }
                                 }}
                             />
@@ -33,7 +43,9 @@ export function renderDatingAppsCheckboxGroup({name, label, values, setFieldValu
                     />
                 ))}
             </FormGroup>
-            <FormHelperText>{touched[name] && errors[name]}</FormHelperText>
+            <FormHelperText>{touched && errors}</FormHelperText>
         </FormControl>
     );
 }
+
+export default DatingAppsCheckboxGroup;

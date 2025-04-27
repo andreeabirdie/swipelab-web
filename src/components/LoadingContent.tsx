@@ -1,13 +1,13 @@
 import {BeatLoader} from "react-spinners";
 import React from "react";
 import {useCssVariable} from "../hooks/useCssVariable.ts";
-import {AnimatedTextSwitcher} from "./AnimatedTextSwitcher.tsx";
+import AnimatedTextSwitcher from "./AnimatedTextSwitcher.tsx";
 
 type LoadingContentProps = {
     loadingStrings: string[] | null;
 }
 
-export const LoadingContent: React.FC<LoadingContentProps> = ({ loadingStrings }) => {
+const LoadingContent: React.FC<LoadingContentProps> = ({ loadingStrings }) => {
     const primaryColor = useCssVariable('--color-primary', '#AD9BF6');
 
     return (
@@ -19,3 +19,5 @@ export const LoadingContent: React.FC<LoadingContentProps> = ({ loadingStrings }
         </div>
     );
 };
+
+export default LoadingContent;
