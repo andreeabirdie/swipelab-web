@@ -1,24 +1,18 @@
-import {Ethnicity} from "./enums/Ethnicity";
-import {Gender} from "./enums/Gender";
-import {Education} from "./enums/Education";
-import {LookingFor} from "./enums/LookingFor";
-import {VicesPreference} from "./enums/VicesPreference.ts";
-import {KidsPreference} from "./enums/KidsPreference";
 
 export interface DatingProfile {
     datingProfileId: string;
     datingProfileSetId: string;
     name: string;
     photoUrl: string;
-    ethnicity: Ethnicity;
+    ethnicity: number;
     age: number;
     height: number;
-    gender: Gender;
-    lookingFor: LookingFor;
-    drinking: VicesPreference;
-    smoking: VicesPreference;
-    kidsPreference: KidsPreference;
-    education: Education;
+    gender: number;
+    lookingFor: number;
+    drinking: number;
+    smoking: number;
+    kidsPreference: number;
+    education: number;
     hobbies: string[];
     personalityPrompts: Record<string, string>;
 }

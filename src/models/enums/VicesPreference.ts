@@ -1,5 +1,5 @@
 export enum VicesPreference {
-    Never,
-    Sometimes,
-    Often,
+    Never="Never",
+    Sometimes="Sometimes",
+    Often="Often",
 }

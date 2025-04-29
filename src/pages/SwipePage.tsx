@@ -1,14 +1,77 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Experiment} from "../models/Experiment.ts";
+import {SwipeUiState} from "../types/SwipeUiState.ts";
+import interactionService from "../services/InteractionService.ts";
+import LoadingContent from "../components/LoadingContent.tsx";
+import strings from "../strings.json";
+import {ErrorCard} from "../components/ErrorCard.tsx";
+import SwipeContent from "../components/SwipeContent.tsx";
+import {SwipeDirection} from "../models/enums/SwipeDirection.ts";
 
 type SwipePageProps = {
     experiment: Experiment
 }
 
 const SwipePage: React.FC<SwipePageProps> = ({experiment}) => {
-    return <div>
-        <h2>{`SwipePage for ${experiment.experimentId}`}</h2>
-    </div>;
+    const [uiState, setUiState] = useState<SwipeUiState>({status: 'loading'});
+
+    const loadCards = () => {
+        fetchProfiles(experiment.datingProfileSetId)
+    };
+
+    useEffect(() => {
+        loadCards();
+    }, []);
+
+    const fetchProfiles = async (setId: string) => {
+        try {
+            const profiles = await interactionService.getDatingProfiles(setId);
+            setUiState({status: "content", profiles: profiles});
+        } catch (err) {
+            console.error(err);
+            setUiState({status: 'error'});
+        }
+    };
+
+    const swipe = (direction: SwipeDirection, elapsedTime: number, datingProfileId: string) => {
+        try {
+            interactionService.swipeProfile(
+                {
+                    swipeState: direction,
+                    timeSpentSeconds: elapsedTime,
+                },
+                datingProfileId
+            );
+        } catch (err) {
+            console.error(err);
+            setUiState({ status: 'error' });
+        }
+    }
+
+    switch (uiState.status) {
+        case "go_to_thank_you":
+            break;
+        case "go_to_final_form":
+            break;
+        case "loading":
+            return <LoadingContent
+                loadingStrings={[
+                    strings.scanning_pool,
+                    strings.filtering_profiles,
+                    strings.calculating_overlap,
+                    strings.matching_preferences,
+                    strings.estimating_compatibility,
+                    strings.refining_matches,
+                    strings.loading_connections
+                ]}
+            />;
+        case "error":
+            return <ErrorCard/>;
+        case "content":
+            return <SwipeContent
+                profiles={uiState.profiles.slice(0, experiment.swipeCount)}
+                onSwipe={swipe}/>
+    }
 };
 
 export default SwipePage
