@@ -27,7 +27,7 @@ class Logger {
     }
 
     private static logToNewRelic(actionName: string, attributes: Record<string, any> = {}) {
-        console.log('Sending to New Relic:', actionName, attributes); // <--- DEBUG
+        // console.log('Sending to New Relic:', actionName, attributes); // <--- DEBUG
         if (typeof newrelic !== 'undefined' && newrelic.addPageAction) {
             newrelic.addPageAction(actionName, attributes);
             console.log("sent")
