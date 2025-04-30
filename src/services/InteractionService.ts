@@ -4,6 +4,7 @@ import {DatingProfile} from "../models/DatingProfile";
 import {ExperimentCreateRequest} from "../models/requests/ExperimentCreateRequest";
 import {Question} from "../models/Question";
 import {QuestionAnswerItemRequest} from "../models/requests/QuestionAnswerItemRequest";
+import {SwipeRequest} from "../models/requests/SwipeRequest.ts";
 
 class InteractionService {
     private baseUrl: string;
@@ -35,6 +36,11 @@ class InteractionService {
     async completeExperiment(experimentId: string, data: QuestionAnswerItemRequest[]): Promise<Experiment> {
         const response = await axios.post<Experiment>(`${this.baseUrl}/experiment/${experimentId}/complete`, data);
         return response.data;
+    }
+
+    async swipeProfile(swipeRequest: SwipeRequest, datingProfileId: string): Promise<void> {
+        const response = await axios.post(`${this.baseUrl}/profiles/${datingProfileId}/swipe`, swipeRequest)
+        return response.data
     }
 }
 

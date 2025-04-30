@@ -64,25 +64,30 @@ const OnboardingPage: React.FC = () => {
         }
     }
 
-    if (uiState.status === 'loading') {
-        return <LoadingContent
-            loadingStrings={[
-                strings.initializing_profile,
-                strings.defining_preferences,
-                strings.setting_boundaries,
-                strings.mapping_persona,
-                strings.configuring_traits,
-                strings.personalizing_experience,
-                strings.establishing_identity
-            ]}
-        />;
+    switch (uiState.status) {
+        case "loading":
+            return <LoadingContent
+                loadingStrings={[
+                    strings.initializing_profile,
+                    strings.defining_preferences,
+                    strings.setting_boundaries,
+                    strings.mapping_persona,
+                    strings.configuring_traits,
+                    strings.personalizing_experience,
+                    strings.establishing_identity
+                ]}
+            />;
+        case "error":
+            return <ErrorCard/>;
+        case "content":
+            return <OnboardingForm onSubmit={createExperiment}/>;
+        case "go_to_swiping":
+            return <SwipePage experiment={uiState.experiment} />;
+        case "go_to_final_form":
+            return <FinalFormPage experimentId={uiState.experiment.experimentId} />
+        case "go_to_thank_you":
+            return <ThankYouPage experimentId={uiState.experiment.experimentId} />;
     }
-    if (uiState.status === 'error') return <ErrorCard/>;
-    if (uiState.status === 'go_to_swiping') return <SwipePage experiment={uiState.experiment} />
-    if (uiState.status === 'go_to_final_form') return <FinalFormPage experimentId={uiState.experiment.experimentId} />
-    if (uiState.status === 'go_to_thank_you') return <ThankYouPage experimentId={uiState.experiment.experimentId} />
-
-    return <OnboardingForm onSubmit={createExperiment}/>
 }
 
 export default OnboardingPage
