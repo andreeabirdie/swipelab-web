@@ -10,6 +10,7 @@ import ThankYouPage from "./ThankYouPage";
 import LoadingContent from "../components/LoadingContent";
 import SelectField from "../components/SelectField";
 import {ErrorCard} from "../components/ErrorCard";
+import Logger from "../utils/logger";
 
 type FinalFormProps = {
     experimentId: string
@@ -23,9 +24,10 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
     const fetchQuestions = async () => {
         try {
             const fetchedQuestions = await interactionService.getFinalQuestions(experimentId);
+            Logger.info(`Successfully retrieved fial questions for experiment ${experimentId}`, { experimentId: experimentId });
             setQuestions(fetchedQuestions);
         } catch (error) {
-            console.error("Failed to fetch questions:", error);
+            Logger.error(`Failed to fetch questions for experiment ${experimentId}`, { experimentId: experimentId });
             setIsError(true);
         } finally {
             setLoading(false);
@@ -73,10 +75,11 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
             try {
                 setLoading(true);
                 await interactionService.completeExperiment(experimentId, payload);
+                Logger.info(`User finalized the final form for experiment${experimentId}`, { experimentId: experimentId });
                 setLoading(false);
                 setSubmitted(true);
             } catch (error) {
-                console.error("Failed to complete experiment:", error);
+                Logger.error(`Failed to save final form answeres for experiment ${experimentId}`, { experimentId: experimentId });
                 setIsError(true);
             }
         },
@@ -108,7 +111,7 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
                     : undefined;
 
                 return (
-                    <div key={question.questionNumber} style={{ marginBottom: "20px" }}>
+                    <div key={question.questionNumber} style={{ marginBottom: "10px" }}>
                         <h3>Question {index + 1}</h3>
                         <p>{question.text}</p>
                         {question.options && question.options.length > 0 ? (
