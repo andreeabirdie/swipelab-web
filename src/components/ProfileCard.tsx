@@ -5,7 +5,7 @@ import ProfileSectionWithIcon from "./ProfileSectionWithIcon.tsx";
 import ProfileSection from "./ProfileSection.tsx";
 import ChildFriendlyIcon from '@mui/icons-material/ChildFriendly';
 import CakeIcon from '@mui/icons-material/Cake';
-import { GiBodyHeight } from "react-icons/gi";
+import {GiBodyHeight} from "react-icons/gi";
 import PublicIcon from '@mui/icons-material/Public';
 import SchoolIcon from '@mui/icons-material/School';
 import SmokingRoomsIcon from '@mui/icons-material/SmokingRooms';
@@ -24,7 +24,7 @@ type ProfileCardProps = {
 const ProfileCard: React.FC<ProfileCardProps> = ({profile}) => {
     const profilePromptsKeys = Object.keys(profile.personalityPrompts)
     return (
-        <Card sx={{ maxWidth: 350, maxHeight: 700, overflowY: 'scroll'}} >
+        <Card sx={{maxWidth: 350, maxHeight: 700, overflowY: 'scroll'}}>
             <CardMedia
                 component="div"
                 sx={{
@@ -52,55 +52,54 @@ const ProfileCard: React.FC<ProfileCardProps> = ({profile}) => {
                 </Box>
             </CardMedia>
             <CardContent>
+                {profilePromptsKeys.length > 0 && <PersonalityPromptCard
+                    prompt={profilePromptsKeys[0]}
+                    answer={profile.personalityPrompts[profilePromptsKeys[0]]}
+                />}
 
-            {profilePromptsKeys.length > 0 && <PersonalityPromptCard
-                prompt={profilePromptsKeys[0]}
-                answer={profile.personalityPrompts[profilePromptsKeys[0]]}
-            />}
+                <ProfileSectionWithIcon
+                    title="About Me"
+                    values={[
+                        `${profile.age}`,
+                        `${profile.height / 100} m`,
+                        Object.values(Ethnicity)[profile.ethnicity],
+                        Object.values(Education)[profile.education],
+                        Object.values(VicesPreference)[profile.smoking],
+                        Object.values(VicesPreference)[profile.drinking],
+                        Object.values(KidsPreference)[profile.kidsPreference]
+                    ]}
+                    icons={[
+                        <CakeIcon/>,
+                        <GiBodyHeight size={20}/>,
+                        <PublicIcon/>,
+                        <SchoolIcon/>,
+                        <SmokingRoomsIcon/>,
+                        <LocalBarIcon/>,
+                        <ChildFriendlyIcon/>
+                    ]}
+                />
 
-            <ProfileSectionWithIcon
-                title="About Me"
-                values={[
-                    `${profile.age}`,
-                    `${profile.height / 100} m`,
-                    Object.values(Ethnicity)[profile.ethnicity],
-                    Object.values(Education)[profile.education],
-                    Object.values(VicesPreference)[profile.smoking],
-                    Object.values(VicesPreference)[profile.drinking],
-                    Object.values(KidsPreference)[profile.kidsPreference]
-                ]}
-                icons={[
-                    <CakeIcon />,
-                    <GiBodyHeight size={24}/>,
-                    <PublicIcon />,
-                    <SchoolIcon />,
-                    <SmokingRoomsIcon />,
-                    <LocalBarIcon />,
-                    <ChildFriendlyIcon />
-                ]}
-            />
-                
-            <ProfileSection
-                title="Looking For"
-                values={[Object.values(LookingFor)[profile.lookingFor]]}
-            />
+                <ProfileSection
+                    title="Looking For"
+                    values={[Object.values(LookingFor)[profile.lookingFor]]}
+                />
 
-            {profilePromptsKeys.length > 1 && <PersonalityPromptCard
-                prompt={profilePromptsKeys[1]}
-                answer={profile.personalityPrompts[profilePromptsKeys[1]]}
-            />}
+                {profilePromptsKeys.length > 1 && <PersonalityPromptCard
+                    prompt={profilePromptsKeys[1]}
+                    answer={profile.personalityPrompts[profilePromptsKeys[1]]}
+                />}
 
-            <ProfileSection title="Hobbies" values={profile.hobbies}/>
+                <ProfileSection title="Hobbies" values={profile.hobbies}/>
 
-            {profilePromptsKeys.length > 2 &&
-                profilePromptsKeys.slice(2).map((key, index) => (
-                    <PersonalityPromptCard
-                        key={index}
-                        prompt={key}
-                        answer={profile.personalityPrompts[key]}
-                    />
-                ))
-            }
+                {profilePromptsKeys.length > 2 &&
+                    profilePromptsKeys.slice(2).map((key, index) => (
+                        <PersonalityPromptCard
+                            key={index}
+                            prompt={key}
+                            answer={profile.personalityPrompts[key]}
+                        />
+                    ))
+                }
             </CardContent>
         </Card>
     );

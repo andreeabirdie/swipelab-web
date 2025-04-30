@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Question} from "../models/Question";
 import interactionService from "../services/InteractionService";
-import { useFormik } from "formik";
+import {useFormik} from "formik";
 import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";

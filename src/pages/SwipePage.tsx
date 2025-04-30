@@ -5,7 +5,7 @@ import interactionService from "../services/InteractionService.ts";
 import LoadingContent from "../components/LoadingContent.tsx";
 import strings from "../strings.json";
 import {ErrorCard} from "../components/ErrorCard.tsx";
-import SwipeContent from "../components/SwipeContent.tsx";
+import SwipeCards from "../components/SwipeCards.tsx";
 import {SwipeDirection} from "../models/enums/SwipeDirection.ts";
 
 type SwipePageProps = {
@@ -68,9 +68,8 @@ const SwipePage: React.FC<SwipePageProps> = ({experiment}) => {
         case "error":
             return <ErrorCard/>;
         case "content":
-            return <SwipeContent
-                profiles={uiState.profiles.slice(0, experiment.swipeCount)}
-                onSwipe={swipe}/>
+            const cards = uiState.profiles.slice(experiment.swipeCount).reverse()
+            return <SwipeCards profiles={cards} onSwipe={swipe}/>
     }
 };
 

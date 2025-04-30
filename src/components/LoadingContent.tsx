@@ -1,6 +1,6 @@
 import React from "react";
 import AnimatedTextSwitcher from "./AnimatedTextSwitcher.tsx";
-import { FourSquare } from "react-loading-indicators";
+import {FourSquare} from "react-loading-indicators";
 import {useTheme} from "@mui/material";
 
 type LoadingContentProps = {
