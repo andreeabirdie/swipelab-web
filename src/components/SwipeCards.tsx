@@ -1,5 +1,5 @@
 import {DatingProfile} from "../models/DatingProfile.ts";
-import {Button, useTheme} from "@mui/material";
+import {Box, Button, LinearProgress, Typography, useTheme} from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CloseIcon from '@mui/icons-material/Close';
 import React, {useEffect, useState} from "react";
@@ -9,9 +9,11 @@ import SwipeableCard from "../components/SwipeableCard";
 type SwipeProps = {
     profiles: DatingProfile[],
     onSwipe: (direction: SwipeDirection, elapsedTime: number, datingProfileId: string) => void,
+    swipeCount: number,
+    numberOfCards: number,
 }
 
-const SwipeCards: React.FC<SwipeProps> = ({profiles, onSwipe}) => {
+const SwipeCards: React.FC<SwipeProps> = ({profiles, onSwipe, swipeCount, numberOfCards}) => {
     const theme = useTheme();
 
     const [currentIndex, setCurrentIndex] = useState(profiles.length - 1);
@@ -32,9 +34,33 @@ const SwipeCards: React.FC<SwipeProps> = ({profiles, onSwipe}) => {
         setSwipeDirection(null);
         setCurrentIndex((prev) => prev - 1);
     };
+    const percentage = (((profiles.length - 1 - currentIndex + swipeCount) / numberOfCards) * 100);
 
     return (
         <div>
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: '100%',
+                    padding: '8px 16px',
+                    marginBottom: '8px',
+                }}
+            >
+                <LinearProgress
+                    variant="determinate"
+                    value={percentage}
+                    sx={{ flexGrow: 1, height: 8, borderRadius: 4 }}
+                />
+                <Typography
+                    variant="body2"
+                    sx={{ marginLeft: 2, minWidth: 40 }}
+                >
+                    {Math.min(100, Math.round(percentage))}%
+                </Typography>
+            </Box>
+
+
             <div className="card-container">
                 {[...profiles].map((profile, index) => (
                     <div

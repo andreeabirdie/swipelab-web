@@ -12,6 +12,7 @@ import {mapOnboardingAnswersToParticipant, OnboardingAnswers} from "../models/On
 import SwipePage from "./SwipePage.tsx";
 import {ExperimentState} from "../models/enums/ExperimentState";
 import FinalFormPage from "./FinalFormPage";
+import Logger from "../utils/logger.ts";
 
 const OnboardingPage: React.FC = () => {
     const [uiState, setUiState] = useState<OnboardingUiState>({status: 'loading'});
@@ -34,19 +35,23 @@ const OnboardingPage: React.FC = () => {
         try {
             const experiment = await interactionService.getExperiment(experimentId);
             localStorageService.set<Experiment>('current_experiment', experiment);
+            Logger.info(`Successfully fetched experiment ${experiment.experimentId}`);
             switch (experiment.state){
                 case ExperimentState.SWIPING:
+                    Logger.info(`Experiment has started. Going to swiping.`);
                     setUiState({status: 'go_to_swiping', experiment: experiment});
                     break;
                 case ExperimentState.FINAL_FORM:
+                    Logger.info(`Swiping has finished. Going to final form.`);
                     setUiState({status: 'go_to_final_form', experiment})
                     break;
                 case ExperimentState.COMPLETE:
+                    Logger.info(`Experiment was already completed. Going to thank you page`);
                     setUiState({status: 'go_to_thank_you', experiment: experiment});
                     break;
             }
         } catch (err) {
-            console.error(err);
+            Logger.error(`Failed to fetch experiment ${experimentId}. Removing from cache.`, {experimentId: experimentId});
             localStorageService.remove('current_experiment');
             setUiState({status: 'content'});
         }
@@ -57,9 +62,10 @@ const OnboardingPage: React.FC = () => {
             setUiState({status: 'loading'});
             const experiment = await interactionService.createExperiment(mapOnboardingAnswersToParticipant(answers));
             localStorageService.set<Experiment>('current_experiment', experiment);
+            Logger.info(`Successfully created experiment ${experiment}`);
             setUiState({status: 'go_to_swiping', experiment: experiment})
         } catch (err) {
-            console.error(err);
+            Logger.error('Failed to create experiment');
             setUiState({status: 'error'});
         }
     }

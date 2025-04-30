@@ -24,7 +24,7 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
     const fetchQuestions = async () => {
         try {
             const fetchedQuestions = await interactionService.getFinalQuestions(experimentId);
-            Logger.info(`Successfully retrieved fial questions for experiment ${experimentId}`, { experimentId: experimentId });
+            Logger.info(`Successfully retrieved final questions for experiment ${experimentId}`, { experimentId: experimentId });
             setQuestions(fetchedQuestions);
         } catch (error) {
             Logger.error(`Failed to fetch questions for experiment ${experimentId}`, { experimentId: experimentId });

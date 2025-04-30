@@ -7,6 +7,7 @@ import strings from "../strings.json";
 import {ErrorCard} from "../components/ErrorCard.tsx";
 import SwipeCards from "../components/SwipeCards.tsx";
 import {SwipeDirection} from "../models/enums/SwipeDirection.ts";
+import Logger from "../utils/logger.ts";
 
 type SwipePageProps = {
     experiment: Experiment
@@ -26,9 +27,10 @@ const SwipePage: React.FC<SwipePageProps> = ({experiment}) => {
     const fetchProfiles = async (setId: string) => {
         try {
             const profiles = await interactionService.getDatingProfiles(setId);
+            Logger.info(`Successfully retrieved ${profiles.length} profiles`);
             setUiState({status: "content", profiles: profiles});
         } catch (err) {
-            console.error(err);
+            Logger.error(`Failed to fetch profiles for experiment ${experiment.experimentId}`, {experimentId: experiment.experimentId});
             setUiState({status: 'error'});
         }
     };
@@ -42,9 +44,10 @@ const SwipePage: React.FC<SwipePageProps> = ({experiment}) => {
                 },
                 datingProfileId
             );
+            Logger.info(`Successfully swiped on profile ${datingProfileId}`);
         } catch (err) {
-            console.error(err);
-            setUiState({ status: 'error' });
+            Logger.error(`Failed to swipe on profile ${datingProfileId}`, {datingProfileId: datingProfileId});
+            setUiState({status: 'error'});
         }
     }
 
@@ -69,7 +72,12 @@ const SwipePage: React.FC<SwipePageProps> = ({experiment}) => {
             return <ErrorCard/>;
         case "content":
             const cards = uiState.profiles.slice(experiment.swipeCount).reverse()
-            return <SwipeCards profiles={cards} onSwipe={swipe}/>
+            return <SwipeCards
+                profiles={cards}
+                onSwipe={swipe}
+                swipeCount={experiment.swipeCount}
+                numberOfCards={uiState.profiles.length}
+            />
     }
 };
 
