@@ -30,7 +30,7 @@ class Logger {
         // console.log('Sending to New Relic:', actionName, attributes); // <--- DEBUG
         if (typeof newrelic !== 'undefined' && newrelic.addPageAction) {
             newrelic.addPageAction(actionName, attributes);
-            console.log("sent")
+            // console.log("sent")
         }
     }
 
