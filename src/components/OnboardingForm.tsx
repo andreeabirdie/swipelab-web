@@ -69,7 +69,6 @@ const OnboardingForm : React.FC<OnboardingFormProps> = ({onSubmit}) => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-                console.log('Submitted', values);
                 onSubmit(values)
             }}
         >

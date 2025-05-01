@@ -1,3 +1,5 @@
+import Logger from "../utils/logger.ts";
+
 export const localStorageService = {
     get<T>(key: string): T | null {
         const item = localStorage.getItem(key);
@@ -6,7 +8,7 @@ export const localStorageService = {
         try {
             return JSON.parse(item) as T;
         } catch (e) {
-            console.error(`Error parsing localStorage item "${key}":`, e);
+            Logger.error(`Error parsing localStorage item "${key}":`, {error: e});
             return null;
         }
     },
@@ -15,7 +17,7 @@ export const localStorageService = {
         try {
             localStorage.setItem(key, JSON.stringify(value));
         } catch (e) {
-            console.error(`Error setting localStorage item "${key}":`, e);
+            Logger.error(`Error setting localStorage item "${key}":`, {error: e});
         }
     },
 

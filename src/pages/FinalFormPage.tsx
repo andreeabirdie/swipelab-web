@@ -11,6 +11,7 @@ import LoadingContent from "../components/LoadingContent";
 import SelectField from "../components/SelectField";
 import {ErrorCard} from "../components/ErrorCard";
 import Logger from "../utils/logger";
+import strings from "../strings.json";
 
 type FinalFormProps = {
     experimentId: string
@@ -103,7 +104,7 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
 
     return (
         <form onSubmit={formik.handleSubmit}>
-            <div>Congratulations! You are done. We have a few questions for you:</div>
+            <div>{strings.final_form_title}</div>
             {questions.map((question, index) => {
                 const fieldName = `answers.${question.questionNumber}`;
                 const error = formik.errors.answers && typeof formik.errors.answers === 'object'

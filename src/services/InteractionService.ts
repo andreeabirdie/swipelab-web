@@ -5,6 +5,8 @@ import {ExperimentCreateRequest} from "../models/requests/ExperimentCreateReques
 import {Question} from "../models/Question";
 import {QuestionAnswerItemRequest} from "../models/requests/QuestionAnswerItemRequest";
 import {SwipeRequest} from "../models/requests/SwipeRequest.ts";
+import {FeedbackPromptResponse} from "../models/FeedbackPromptsResponse.ts";
+import {ReflectRequest} from "../models/requests/ReflectRequest.ts";
 
 class InteractionService {
     private baseUrl: string;
@@ -40,6 +42,16 @@ class InteractionService {
 
     async swipeProfile(swipeRequest: SwipeRequest, datingProfileId: string): Promise<void> {
         const response = await axios.post(`${this.baseUrl}/profiles/${datingProfileId}/swipe`, swipeRequest)
+        return response.data
+    }
+
+    async getReflectionPrompts(experimentId: string): Promise<FeedbackPromptResponse> {
+        const response = await axios.get<FeedbackPromptResponse>(`${this.baseUrl}/feedback/prompts/${experimentId}`)
+        return response.data;
+    }
+
+    async reflectOnProfile(reflectRequest: ReflectRequest, datingProfileId: string): Promise<void> {
+        const response = await axios.post(`${this.baseUrl}/profiles/${datingProfileId}/reflect`, reflectRequest)
         return response.data
     }
 }

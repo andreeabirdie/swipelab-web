@@ -138,3 +138,10 @@ button:hover {
   justify-content: space-evenly;
   margin-top: 16px;
 }
+
+.feedback-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+}

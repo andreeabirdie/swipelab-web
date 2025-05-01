@@ -1,0 +1,112 @@
+import React from "react";
+import {FeedbackAnswers} from "../models/FeedbackAnswers.ts";
+import * as Yup from "yup";
+import {Box, Button, FormControlLabel, Switch, TextField, Typography} from "@mui/material";
+import {Form, Formik} from "formik";
+import strings from "../strings.json";
+
+type FeedbackFormProps = {
+    feedbackPrompts: string[],
+    userLiked: boolean | null,
+    onSubmitForm: (changedOpinion: boolean, answers: Record<string, string>) => void
+}
+const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, onSubmitForm}) => {
+    const promptKeys = feedbackPrompts.map((_, idx) => `prompt_${idx}`);
+
+    const initialValues: FeedbackAnswers = {
+        promptsAnswers: promptKeys.reduce((acc, key) => {
+            acc[key] = "";
+            return acc;
+        }, {} as Record<string, string>),
+        changedOpinion: false
+    };
+
+    const validationSchema = Yup.object({
+        promptsAnswers: Yup.object(
+            promptKeys.reduce((acc, key) => {
+                acc[key] = Yup.string().required('Required').max(500, 'Max 500 characters');
+                return acc;
+            }, {} as Record<string, Yup.StringSchema>)
+        ),
+        changedOpinion: Yup.boolean().required()
+    });
+
+    const switchQuestion = userLiked ? "Would you like to change your swipe option?" : `You previously ${userLiked ? 'liked' : 'disliked'} this profile. Would you like to change your answer?`
+
+    return (
+        <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={(values) => {
+                const remappedAnswers: Record<string, string> = {};
+                feedbackPrompts.forEach((prompt, idx) => {
+                    const key = `prompt_${idx}`;
+                    remappedAnswers[prompt] = values.promptsAnswers[key];
+                });
+                onSubmitForm(values.changedOpinion, remappedAnswers);
+            }}
+        >
+            {({values, handleChange, errors, touched}) => (
+                <Form>
+                    <Box
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="center"
+                        gap={3}
+                        mb={3}
+                        mt={13}
+                    >
+                        <Typography textAlign="justify" variant="subtitle2">{strings.feedback_info}</Typography>
+                        {feedbackPrompts.map((prompt, index) => {
+                            const key = `prompt_${index}`;
+                            return (
+                                <Box key={key}>
+                                    <Typography mb={3} textAlign="justify" variant="body1"><b>{prompt}</b></Typography>
+                                    <TextField
+                                        fullWidth
+                                        multiline
+                                        minRows={4}
+                                        name={`promptsAnswers.${key}`}
+                                        value={values.promptsAnswers[key]}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            if (val.length <= 500) {
+                                                handleChange(e);
+                                            }
+                                        }}
+                                        error={Boolean(errors.promptsAnswers?.[key] && touched.promptsAnswers?.[key])}
+                                        helperText={touched.promptsAnswers?.[key] && errors.promptsAnswers?.[key]}
+                                    />
+                                    <Typography variant="caption" align="right" display="block">
+                                        {values.promptsAnswers[key]?.length || 0}/500
+                                    </Typography>
+                                </Box>
+                            );
+                        })}
+
+                        <Box display="flex" alignItems="center" gap={2}>
+                            <Typography variant="body1"><b>{switchQuestion}</b></Typography>)
+
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        name="changedOpinion"
+                                        checked={values.changedOpinion}
+                                        onChange={handleChange}
+                                    />
+                                }
+                                label={values.changedOpinion ? 'Yes' : 'No'}
+                            />
+                        </Box>
+
+                        <Button type="submit" variant="contained" color="primary">
+                            Submit
+                        </Button>
+                    </Box>
+                </Form>
+            )}
+        </Formik>
+    );
+};
+
+export default FeedbackForm;

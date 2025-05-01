@@ -21,9 +21,9 @@ const OnboardingPage: React.FC = () => {
         const experiment = localStorageService.get<Experiment>('current_experiment');
 
         if (experiment == null) {
-            setUiState({status: 'content'})
+            setUiState({status: 'content'});
         } else {
-            fetchExperiment(experiment.experimentId)
+            fetchExperiment(experiment.experimentId).then(_ => {});
         }
     };
 

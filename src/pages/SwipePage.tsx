@@ -5,9 +5,12 @@ import interactionService from "../services/InteractionService.ts";
 import LoadingContent from "../components/LoadingContent.tsx";
 import strings from "../strings.json";
 import {ErrorCard} from "../components/ErrorCard.tsx";
-import SwipeCards from "../components/SwipeCards.tsx";
-import {SwipeDirection} from "../models/enums/SwipeDirection.ts";
 import Logger from "../utils/logger.ts";
+import {SwipeRequest} from "../models/requests/SwipeRequest.ts";
+import {CardInfo} from "../models/CardInfo.ts";
+import {DatingProfile} from "../models/DatingProfile.ts";
+import SwipeCards from "../components/SwipeCards.tsx";
+import FinalFormPage from "./FinalFormPage.tsx";
 
 type SwipePageProps = {
     experiment: Experiment
@@ -17,7 +20,7 @@ const SwipePage: React.FC<SwipePageProps> = ({experiment}) => {
     const [uiState, setUiState] = useState<SwipeUiState>({status: 'loading'});
 
     const loadCards = () => {
-        fetchProfiles(experiment.datingProfileSetId)
+        fetchProfiles(experiment.datingProfileSetId).then(_ => {});
     };
 
     useEffect(() => {
@@ -35,15 +38,9 @@ const SwipePage: React.FC<SwipePageProps> = ({experiment}) => {
         }
     };
 
-    const swipe = (direction: SwipeDirection, elapsedTime: number, datingProfileId: string) => {
+    const swipe = (swipeRequest: SwipeRequest, datingProfileId: string) => {
         try {
-            interactionService.swipeProfile(
-                {
-                    swipeState: direction,
-                    timeSpentSeconds: elapsedTime,
-                },
-                datingProfileId
-            );
+            interactionService.swipeProfile(swipeRequest, datingProfileId);
             Logger.info(`Successfully swiped on profile ${datingProfileId}`);
         } catch (err) {
             Logger.error(`Failed to swipe on profile ${datingProfileId}`, {datingProfileId: datingProfileId});
@@ -52,10 +49,8 @@ const SwipePage: React.FC<SwipePageProps> = ({experiment}) => {
     }
 
     switch (uiState.status) {
-        case "go_to_thank_you":
-            break;
         case "go_to_final_form":
-            break;
+            return <FinalFormPage experimentId={experiment.experimentId} />;
         case "loading":
             return <LoadingContent
                 loadingStrings={[
@@ -71,14 +66,40 @@ const SwipePage: React.FC<SwipePageProps> = ({experiment}) => {
         case "error":
             return <ErrorCard/>;
         case "content":
-            const cards = uiState.profiles.slice(experiment.swipeCount).reverse()
+            const withIndex = uiState.profiles.map((value, index) => ({ index, value }));
+            const halfSize = Math.floor(uiState.profiles.length / 2);
+
+            const firstHalf = withIndex.filter(item => item.index < halfSize);
+            const secondHalf = withIndex.filter(item => item.index >= halfSize);
+
+            const cardsToSkip = experiment.swipeCount + experiment.reflectionCount;
+            const cards: CardInfo[] = [
+                ...firstHalf.map(item => createCardInfo(item.value, false)),
+                ...secondHalf.flatMap(item => [
+                    createCardInfo(item.value, false),
+                    createCardInfo(item.value, true),
+                ])
+            ]
+                .slice(cardsToSkip)
+                .reverse();
+
             return <SwipeCards
-                profiles={cards}
+                experimentId={experiment.experimentId}
+                cards={cards}
                 onSwipe={swipe}
-                swipeCount={experiment.swipeCount}
-                numberOfCards={uiState.profiles.length}
+                swipeCount={cardsToSkip}
+                numberOfCards={1.5 * uiState.profiles.length}
+                setSwipePageState={setUiState}
             />
     }
 };
+
+function createCardInfo(profile: DatingProfile, isFeedback: boolean): CardInfo {
+    return {
+        profile: profile,
+        isFeedbackCard: isFeedback,
+        userLiked: null
+    };
+}
 
 export default SwipePage
