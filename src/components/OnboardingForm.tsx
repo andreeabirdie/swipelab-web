@@ -10,7 +10,7 @@ import {InterestedInGender} from "../models/enums/InterestedInGender.ts";
 import {RelationshipStatus} from "../models/enums/RelationshipStatus.ts";
 import {Gender} from "../models/enums/Gender.ts";
 import * as Yup from 'yup';
-import {differenceInYears} from 'date-fns';
+import {differenceInYears, isAfter} from 'date-fns';
 import SelectField from './SelectField.tsx';
 import AgeSlider from "./AgeSlider.tsx";
 import {OnboardingAnswers} from "../models/OnboardingAnswers.ts";
@@ -35,13 +35,17 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
     const validationSchema = Yup.object({
         dateOfBirth: Yup.string()
             .required('Required')
+            .test('not-in-future', "We haven’t invented time travel yet. Please enter a real birthdate.", (value) => {
+                if (!value) return false;
+                return !isAfter(new Date(value), new Date());
+            })
             .test('is-18', "Unfortunately, you are not eligible for the study. Thank you for your time!", (value) => {
                 if (!value) return false;
                 return differenceInYears(new Date(), new Date(value)) >= 18;
             })
             .test('is-100', "Are you more the 100 years old?", (value) => {
                 if (!value) return false;
-                return differenceInYears(new Date(), new Date(value)) >= 100;
+                return differenceInYears(new Date(), new Date(value)) <= 100;
             }),
         ethnicity: Yup.string().required('Required'),
         countryOfResidence: Yup.string().required('Required'),
@@ -193,7 +197,12 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
                             options={Object.values(DatingApps)}
                         />
 
-                        <Button variant="contained" color="primary" type="submit">
+                        <Button variant="contained" type="submit" sx={{
+                            backgroundColor: Object.keys(errors).length > 0 ? 'error.main' : 'primary.main',
+                            '&:hover': {
+                                backgroundColor: Object.keys(errors).length > 0 ? 'error.dark' : 'secondary.main',
+                            }
+                        }}>
                             {strings.onboarding_next_button_label}
                         </Button>
                     </Box>
