@@ -85,7 +85,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, 
                         })}
 
                         <Box display="flex" alignItems="center" gap={2}>
-                            <Typography variant="body1"><b>{switchQuestion}</b></Typography>)
+                            <Typography variant="body1"><b>{switchQuestion}</b></Typography>
 
                             <FormControlLabel
                                 control={

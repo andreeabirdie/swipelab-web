@@ -24,7 +24,7 @@ type ProfileCardProps = {
 const ProfileCard: React.FC<ProfileCardProps> = ({profile}) => {
     const profilePromptsKeys = Object.keys(profile.personalityPrompts)
     return (
-        <Card sx={{width: 350, maxHeight: 700, overflowY: 'scroll'}}>
+        <Card sx={{width: 350, height: 700, overflowY: 'scroll'}}>
             <CardMedia
                 component="div"
                 sx={{

@@ -21,7 +21,7 @@ type OnboardingFormProps = {
     onSubmit: (answers: OnboardingAnswers) => void
 }
 
-const OnboardingForm : React.FC<OnboardingFormProps> = ({onSubmit}) => {
+const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
     const otherEthnicityRef = useRef<HTMLInputElement | null>(null);
 
     const [ethnicity, setEthnicity] = useState('')
@@ -38,6 +38,10 @@ const OnboardingForm : React.FC<OnboardingFormProps> = ({onSubmit}) => {
             .test('is-18', "Unfortunately, you are not eligible for the study. Thank you for your time!", (value) => {
                 if (!value) return false;
                 return differenceInYears(new Date(), new Date(value)) >= 18;
+            })
+            .test('is-100', "Are you more the 100 years old?", (value) => {
+                if (!value) return false;
+                return differenceInYears(new Date(), new Date(value)) >= 100;
             }),
         ethnicity: Yup.string().required('Required'),
         countryOfResidence: Yup.string().required('Required'),
@@ -51,7 +55,7 @@ const OnboardingForm : React.FC<OnboardingFormProps> = ({onSubmit}) => {
         knownDatingApps: Yup.array().min(1, 'At least one box must be ticked')
     });
 
-    const initialValues : OnboardingAnswers = {
+    const initialValues: OnboardingAnswers = {
         dateOfBirth: '',
         ethnicity: '',
         otherEthnicity: '',
