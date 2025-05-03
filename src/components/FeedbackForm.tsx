@@ -53,8 +53,6 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, 
                         flexDirection="column"
                         alignItems="center"
                         gap={3}
-                        mb={3}
-                        mt={13}
                     >
                         <Typography textAlign="justify" variant="subtitle2">{strings.feedback_info}</Typography>
                         {feedbackPrompts.map((prompt, index) => {

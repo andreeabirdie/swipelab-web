@@ -1,7 +1,6 @@
 import {Box, Button, LinearProgress, Typography, useTheme} from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CloseIcon from '@mui/icons-material/Close';
-import PersonIcon from '@mui/icons-material/Person';
 import React, {useEffect, useState} from "react";
 import {SwipeDirection} from "../models/enums/SwipeDirection.ts";
 import SwipeableCard from "../components/SwipeableCard";
@@ -11,7 +10,8 @@ import interactionService from "../services/InteractionService.ts";
 import Logger from "../utils/logger.ts";
 import {ReflectRequest} from "../models/requests/ReflectRequest.ts";
 import {SwipeUiState} from "../types/SwipeUiState.ts";
-
+import useScreenSize from "../hooks/useScreenSize.ts";
+import useCardSize from "../hooks/useCardHeight.ts";
 
 type SwipeProps = {
     experimentId: string
@@ -31,6 +31,8 @@ const SwipeCards: React.FC<SwipeProps> = ({
                                               setSwipePageState
                                           }) => {
     const theme = useTheme();
+    const screenSize = useScreenSize()
+    const cardSize = useCardSize()
 
     const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | 'up' | null>(null);
     const [cardShownTime, setCardShownTime] = useState<number>(0);
@@ -41,9 +43,6 @@ const SwipeCards: React.FC<SwipeProps> = ({
         setCardShownTime(Date.now());
         if (cards[currentIndex].isFeedbackCard) {
             getReflection(experimentId).then(_ => {});
-        }
-        if (currentIndex < 0) {
-            setSwipePageState({status: "go_to_final_form"})
         }
     }, [currentIndex]);
     const [numberOfFlips, setNumberOfFlips] = useState(0);
@@ -82,6 +81,9 @@ const SwipeCards: React.FC<SwipeProps> = ({
         setFeedbackPrompts(null)
         setSwipeDirection(null);
         setNumberOfFlips(0);
+        if (currentIndex == 0) {
+            setSwipePageState({status: "go_to_final_form"})
+        }
         setCurrentIndex((prev) => prev - 1);
     };
 
@@ -108,7 +110,7 @@ const SwipeCards: React.FC<SwipeProps> = ({
 
     const reflect = (reflectRequest: ReflectRequest, datingProfileId: string) => {
         try {
-            interactionService.reflectOnProfile(reflectRequest, datingProfileId).then(_ => {});;
+            interactionService.reflectOnProfile(reflectRequest, datingProfileId).then(_ => {});
             Logger.info(`Successfully reflected on profile ${datingProfileId}`);
         } catch (err) {
             Logger.error(`Failed to reflect on profile ${datingProfileId}`, {datingProfileId: datingProfileId});
@@ -119,14 +121,26 @@ const SwipeCards: React.FC<SwipeProps> = ({
     const percentage = (((cards.length - 1 - currentIndex + swipeCount) / numberOfCards) * 100);
 
     return (
-        <>
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: screenSize.height,
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 2,
+                boxSizing: 'border-box'
+            }}
+        >
             <Box
                 sx={{
                     display: 'flex',
                     alignItems: 'center',
+                    justifyContent: 'center',
                     width: '100%',
-                    padding: '8px 16px',
-                    marginBottom: '8px',
+                    height: '10px',
+                    marginBottom: '16px',
+                    marginTop: '16px'
                 }}
             >
                 <LinearProgress
@@ -142,47 +156,55 @@ const SwipeCards: React.FC<SwipeProps> = ({
                 </Typography>
             </Box>
 
-            <div className="card-container">
-                {[...cards].map((card, index) => (
-                    <div
-                        key={`${card.profile.datingProfileId}-${card.isFeedbackCard}`}
-                        style={{
-                            zIndex: index,
-                            display: index > currentIndex ? 'none' : 'block'
-                        }}
-                    >
-                        <SwipeableCard
-                            index={index}
-                            card={card}
-                            swipeDirection={swipeDirection}
-                            currentIndex={currentIndex}
-                            onSwipeEnd={handleSwipeEnd}
-                            feedbackPrompts={feedbackPrompts}
-                            flipped={numberOfFlips % 2 === 1}
-                            onSubmitFeedback={submitFeebackForm}
-                        />
-                    </div>
-                ))}
-            </div>
+            <Box
+                sx={{
+                    width: cardSize.width,
+                    height: cardSize.height,
+                }}
+                className='card-container'
+            >
+                {[...cards].map((card, index) => {
+                    const shouldDisplay = index <= currentIndex && index > currentIndex - 2;
+
+                    return (
+                        <div
+                            key={`${card.profile.datingProfileId}-${card.isFeedbackCard}`}
+                            style={{
+                                zIndex: index,
+                                display: shouldDisplay ? 'block' : 'none'
+                            }}
+                        >
+                            <SwipeableCard
+                                index={index}
+                                card={card}
+                                swipeDirection={swipeDirection}
+                                currentIndex={currentIndex}
+                                onSwipeEnd={handleSwipeEnd}
+                                feedbackPrompts={feedbackPrompts}
+                                flipped={numberOfFlips % 2 === 1}
+                                onSubmitFeedback={submitFeebackForm}
+                            />
+                        </div>
+                    );
+                })}
+            </Box>
 
             {cards[currentIndex].isFeedbackCard ?
-                <div className="button-container">
+                <Box className="button-container" sx={{width: cardSize.width}}>
                     <Button
-                        onClick={() => {
-                            flipCard()
-                        }}
+                        onClick={flipCard}
                         sx={{
-                            minWidth: 56,
-                            minHeight: 56,
-                            borderRadius: '50%',
+                            textTransform: 'none',
                             backgroundColor: theme.palette.primary.main,
-                            color: theme.palette.secondary.contrastText
+                            color: theme.palette.text.primary,
+                            fontWeight: 'bold',
                         }}
+                        disabled={feedbackPrompts == null}
                     >
-                        <PersonIcon />
+                        {numberOfFlips % 2 == 1 ? 'Go back to questions' : 'See profile again'}
                     </Button>
-                </div> :
-                <div className="button-container">
+                </Box> :
+                <Box className="button-container" sx={{width: cardSize.width}}>
                     <Button
                         onClick={() => {
                             handleSwipe("left")
@@ -212,9 +234,9 @@ const SwipeCards: React.FC<SwipeProps> = ({
                     >
                         <FavoriteIcon/>
                     </Button>
-                </div>
+                </Box>
             }
-        </>
+        </Box>
     );
 };
 

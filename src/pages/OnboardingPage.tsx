@@ -13,6 +13,7 @@ import SwipePage from "./SwipePage.tsx";
 import {ExperimentState} from "../models/enums/ExperimentState";
 import FinalFormPage from "./FinalFormPage";
 import Logger from "../utils/logger.ts";
+import {AxiosError} from "axios";
 
 const OnboardingPage: React.FC = () => {
     const [uiState, setUiState] = useState<OnboardingUiState>({status: 'loading'});
@@ -51,9 +52,15 @@ const OnboardingPage: React.FC = () => {
                     break;
             }
         } catch (err) {
-            Logger.error(`Failed to fetch experiment ${experimentId}. Removing from cache.`, {experimentId: experimentId});
-            localStorageService.remove('current_experiment');
-            setUiState({status: 'content'});
+            Logger.error(`Failed to fetch experiment ${experimentId}`, {experimentId: experimentId});
+            if((err as AxiosError)?.message === 'Network Error') {
+                Logger.error(`No internet`);
+                setUiState({status: 'error'});
+            } else {
+                Logger.error(`Removing experiment ${experimentId} from cache.`, {experimentId: experimentId});
+                localStorageService.remove('current_experiment');
+                setUiState({status: 'content'});
+            }
         }
     };
 
