@@ -105,9 +105,6 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
-button:hover {
-  background-color: var(--color-secondary);
-}
 
 .on-surface-text {
   color: var(--color-on-surface);
@@ -133,9 +130,9 @@ button:hover {
 }
 
 .button-container {
-  max-width: 350px;
   display: flex;
   justify-content: space-evenly;
   height: 60px;
   margin-top: 16px;
+  margin-bottom: 48px;
 }

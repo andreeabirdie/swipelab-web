@@ -1,10 +1,10 @@
-// import {motion} from 'framer-motion';
+import {AnimatePresence, motion} from 'framer-motion';
 import React from "react";
-// import ProfileCard from "./ProfileCard.tsx";
+import ProfileCard from "./ProfileCard.tsx";
 import {CardInfo} from "../models/CardInfo.ts";
-import {Box, Card, CardContent} from "@mui/material";
-import LoadingContent from "./LoadingContent.tsx";
-import FeedbackForm from "./FeedbackForm.tsx";
+import FeedbackCard from "./FeedbackCard.tsx";
+import useCardSize from "../hooks/useCardHeight.ts";
+import { Box } from '@mui/material';
 
 interface FlippableCardProps {
     card: CardInfo;
@@ -13,68 +13,46 @@ interface FlippableCardProps {
     onSubmitFeedback: (changedOpinion: boolean, answers: Record<string, string>) => void;
 }
 
-const FlippableCard: React.FC<FlippableCardProps> = ({ card, flipped, feedbackPrompts, onSubmitFeedback }) => {
-    return (
-        // <motion.div
-        //     style={{
-        //         perspective: 1000,
-        //         minWidth: '350px',
-        //         minHeight: '700px'
-        //     }}
-        // >
-        //     <motion.div
-        //         animate={{ rotateY: flipped ? 180 : 0 }}
-        //         transition={{ duration: 0.6 }}
-        //         style={{
-        //             width: '100%',
-        //             height: '100%',
-        //             transformStyle: 'preserve-3d',
-        //             position: 'relative'
-        //         }}
-        //     >
-        //         <motion.div
-        //             style={{
-        //                 backfaceVisibility: 'hidden',
-        //                 width: '100%',
-        //                 height: '100%',
-        //                 position: 'absolute',
-        //             }}
-        //         >
-                    <Card sx={{width: 350, height: 'min(700px, calc(100vh - 140px))', overflowY: 'auto'}}>
-                        <CardContent>
-                            {feedbackPrompts === null ?
-                                <Box sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    height: 'min(700px, calc(100vh - 140px))',
-                                    justifyContent: 'center'
-                                }}>
-                                    <LoadingContent loadingStrings={null}/>
-                                </Box> :
-                                <FeedbackForm
-                                    feedbackPrompts={feedbackPrompts}
-                                    userLiked={card.userLiked}
-                                    onSubmitForm={onSubmitFeedback}
-                                />
-                            }
-                        </CardContent>
-                    </Card>
-                // </motion.div>
-                //
-                // <motion.div
-                //     style={{
-                //         backfaceVisibility: 'hidden',
-                //         transform: 'rotateY(180deg)',
-                //         position: 'absolute',
-                //         width: '100%',
-                //         height: '100%',
-                //     }}
-                // >
-                //     <ProfileCard profile={card.profile} />
-                // </motion.div>
-        //     </motion.div>
-        // </motion.div>
-    );
+const FlippableCard: React.FC<FlippableCardProps> = ({card, flipped, feedbackPrompts, onSubmitFeedback}) => {
+    const cardSize = useCardSize();
+
+    return <Box
+        sx={{
+            position: 'relative',
+            width: cardSize.width,
+            height: cardSize.height,
+            overflow: 'hidden',
+        }}
+    >
+        {/* FeedbackCard stays always rendered */}
+        <FeedbackCard
+            card={card}
+            feedbackPrompts={feedbackPrompts}
+            onSubmitFeedback={onSubmitFeedback}
+        />
+
+        <AnimatePresence>
+            {flipped && (
+                <motion.div
+                    key="profile"
+                    initial={{ y: '-100%' }}
+                    animate={{ y: 0 }}
+                    exit={{ y: '-100%' }}
+                    transition={{ duration: 0.4 }}
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: cardSize.width,
+                        height: cardSize.height,
+                        zIndex: 10,
+                    }}
+                >
+                    <ProfileCard profile={card.profile} />
+                </motion.div>
+            )}
+        </AnimatePresence>
+    </Box>
 };
 
 export default FlippableCard;

@@ -16,6 +16,7 @@ import {VicesPreference} from "../models/enums/VicesPreference.ts";
 import {KidsPreference} from "../models/enums/KidsPreference.ts";
 import {Education} from "../models/enums/Education.ts";
 import {LookingFor} from "../models/enums/LookingFor.ts";
+import useCardSize from "../hooks/useCardHeight.ts";
 
 type ProfileCardProps = {
     profile: DatingProfile
@@ -23,14 +24,15 @@ type ProfileCardProps = {
 
 const ProfileCard: React.FC<ProfileCardProps> = ({profile}) => {
     const profilePromptsKeys = Object.keys(profile.personalityPrompts)
+    const cardSize = useCardSize();
 
     return (
-        <Card sx={{width: 350, height: 'min(700px, calc(100vh - 140px))', overflowY: 'auto'}}>
+        <Card sx={{width: cardSize.width, height: cardSize.height, overflowY: 'auto',}}>
             <CardMedia
                 component="div"
                 sx={{
-                    height: 350,
-                    width: 350,
+                    height: cardSize.width,
+                    width: cardSize.width,
                     position: 'relative',
                     backgroundImage: `url(${profile.photoUrl})`,
                     backgroundSize: 'cover',
