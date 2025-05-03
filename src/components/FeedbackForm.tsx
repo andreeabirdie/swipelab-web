@@ -1,17 +1,18 @@
-import React from "react";
+import React, {Ref} from "react";
 import {FeedbackAnswers} from "../models/FeedbackAnswers.ts";
 import * as Yup from "yup";
-import {Box, Button, FormControlLabel, Switch, TextField, Typography} from "@mui/material";
-import {Form, Formik} from "formik";
+import {Box, FormControlLabel, Switch, TextField, Typography} from "@mui/material";
+import {Form, Formik, FormikProps} from "formik";
 import strings from "../strings.json";
 
 type FeedbackFormProps = {
     feedbackPrompts: string[],
     userLiked: boolean | null,
-    onSubmitForm: (changedOpinion: boolean, answers: Record<string, string>) => void
+    onSubmitForm: (changedOpinion: boolean, answers: Record<string, string>) => void,
+    formRef: Ref<FormikProps<FeedbackAnswers>>;
 }
 
-const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, onSubmitForm}) => {
+const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, onSubmitForm, formRef}) => {
     const promptKeys = feedbackPrompts.map((_, idx) => `prompt_${idx}`);
 
     const initialValues: FeedbackAnswers = {
@@ -25,7 +26,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, 
     const validationSchema = Yup.object({
         promptsAnswers: Yup.object(
             promptKeys.reduce((acc, key) => {
-                acc[key] = Yup.string().required('Required').max(500, 'Max 500 characters');
+                acc[key] = Yup.string().required(strings.form_required).max(500, 'Max 500 characters');
                 return acc;
             }, {} as Record<string, Yup.StringSchema>)
         ),
@@ -36,6 +37,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, 
 
     return (
         <Formik
+            innerRef={formRef}
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => {
@@ -47,7 +49,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, 
                 onSubmitForm(values.changedOpinion, remappedAnswers);
             }}
         >
-            {({values, handleChange, errors, touched}) => (
+            {({values, handleChange, errors}) => (
                 <Form>
                     <Box
                         display="flex"
@@ -73,8 +75,8 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, 
                                                 handleChange(e);
                                             }
                                         }}
-                                        error={Boolean(errors.promptsAnswers?.[key] && touched.promptsAnswers?.[key])}
-                                        helperText={touched.promptsAnswers?.[key] && errors.promptsAnswers?.[key]}
+                                        error={Boolean(errors.promptsAnswers?.[key])}
+                                        helperText={errors.promptsAnswers?.[key]}
                                     />
                                     <Typography variant="caption" align="right" display="block">
                                         {values.promptsAnswers[key]?.length || 0}/500
@@ -98,10 +100,6 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, 
                                 label={values.changedOpinion ? strings.feedback_yes : strings.feedback_no }
                             />
                         </Box>
-
-                        <Button type="submit" variant="contained" color="primary">
-                            Submit
-                        </Button>
                     </Box>
                 </Form>
             )}

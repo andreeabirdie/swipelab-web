@@ -34,7 +34,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
 
     const validationSchema = Yup.object({
         dateOfBirth: Yup.string()
-            .required(strings.onboarding_required)
+            .required(strings.form_required)
             .test('not-in-future', strings.onboarding_time_travel, (value) => {
                 if (!value) return false;
                 return !isAfter(new Date(value), new Date());
@@ -47,14 +47,14 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
                 if (!value) return false;
                 return differenceInYears(new Date(), new Date(value)) <= 100;
             }),
-        ethnicity: Yup.string().required(strings.onboarding_required),
-        countryOfResidence: Yup.string().required(strings.onboarding_required),
-        gender: Yup.string().required(strings.onboarding_required),
-        relationshipStatus: Yup.string().required(strings.onboarding_required),
-        interestedInGender: Yup.string().required(strings.onboarding_required),
-        ageRange: Yup.array().required(strings.onboarding_required),
+        ethnicity: Yup.string().required(strings.form_required),
+        countryOfResidence: Yup.string().required(strings.form_required),
+        gender: Yup.string().required(strings.form_required),
+        relationshipStatus: Yup.string().required(strings.form_required),
+        interestedInGender: Yup.string().required(strings.form_required),
+        ageRange: Yup.array().required(strings.form_required),
         experience: Yup.string()
-            .required(strings.onboarding_required)
+            .required(strings.form_required)
             .notOneOf([UsageOfDatingAppsMap[UsageOfDatingApps.NeverUsed]], strings.onboarding_error_invalid_participant),
         knownDatingApps: Yup.array().min(1, strings.onboarding_one_box)
     });

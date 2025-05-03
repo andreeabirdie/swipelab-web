@@ -18,7 +18,7 @@
   "onboarding_next_button_label": "Next",
   "onboarding_error_fill_required_fields": "Please fill in all required fields",
   "onboarding_error_invalid_participant": "Unfortunately, you are not eligible for the study. Thank you for your time!",
-  "onboarding_required": "Required",
+  "form_required": "Required",
   "onboarding_one_box": "At least one box must be ticked",
   "onboarding_old": "Are you more the 100 years old?",
   "onboarding_time_travel": "We haven’t invented time travel yet. Please enter a real birthdate.",
@@ -32,6 +32,10 @@
   "feedback_info": "Please answer the following questions about the profile you just saw. You can revisit the profile by tapping the button below",
   "feedback_yes": "Yes",
   "feedback_no": "No",
+  "feedback_see_profile": "See questions",
+  "feedback_go_to_questions": "See profile",
+  "feedback_submit": "Submit",
+
 
   "final_form_title": "It's finally over! But before you go, we have a few questions about your experience",
 
