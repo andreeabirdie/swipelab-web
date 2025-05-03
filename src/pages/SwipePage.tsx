@@ -85,7 +85,7 @@ const SwipePage: React.FC<SwipePageProps> = ({experiment}) => {
 
             return <SwipeCards
                 experimentId={experiment.experimentId}
-                cards={cards}
+                cards={[cards[0], cards[1]]}
                 onSwipe={swipe}
                 swipeCount={cardsToSkip}
                 numberOfCards={1.5 * uiState.profiles.length}

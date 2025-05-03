@@ -12,7 +12,6 @@ import Logger from "../utils/logger.ts";
 import {ReflectRequest} from "../models/requests/ReflectRequest.ts";
 import {SwipeUiState} from "../types/SwipeUiState.ts";
 
-
 type SwipeProps = {
     experimentId: string
     cards: CardInfo[],
@@ -108,7 +107,7 @@ const SwipeCards: React.FC<SwipeProps> = ({
 
     const reflect = (reflectRequest: ReflectRequest, datingProfileId: string) => {
         try {
-            interactionService.reflectOnProfile(reflectRequest, datingProfileId).then(_ => {});;
+            interactionService.reflectOnProfile(reflectRequest, datingProfileId).then(_ => {});
             Logger.info(`Successfully reflected on profile ${datingProfileId}`);
         } catch (err) {
             Logger.error(`Failed to reflect on profile ${datingProfileId}`, {datingProfileId: datingProfileId});
@@ -119,14 +118,25 @@ const SwipeCards: React.FC<SwipeProps> = ({
     const percentage = (((cards.length - 1 - currentIndex + swipeCount) / numberOfCards) * 100);
 
     return (
-        <>
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100vh',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 2,
+                boxSizing: 'border-box'
+            }}
+        >
             <Box
                 sx={{
                     display: 'flex',
                     alignItems: 'center',
+                    justifyContent: 'center',
                     width: '100%',
-                    padding: '8px 16px',
-                    marginBottom: '8px',
+                    height: '10px',
+                    marginBottom: '16px'
                 }}
             >
                 <LinearProgress
@@ -142,7 +152,14 @@ const SwipeCards: React.FC<SwipeProps> = ({
                 </Typography>
             </Box>
 
-            <div className="card-container">
+            <Box
+                sx={{
+                    width: 350,
+                    maxWidth: 350,
+                    height: 'min(700px, calc(100vh - 140px))'
+                }}
+                className='card-container'
+            >
                 {[...cards].map((card, index) => (
                     <div
                         key={`${card.profile.datingProfileId}-${card.isFeedbackCard}`}
@@ -163,7 +180,7 @@ const SwipeCards: React.FC<SwipeProps> = ({
                         />
                     </div>
                 ))}
-            </div>
+            </Box>
 
             {cards[currentIndex].isFeedbackCard ?
                 <div className="button-container">
@@ -214,7 +231,7 @@ const SwipeCards: React.FC<SwipeProps> = ({
                     </Button>
                 </div>
             }
-        </>
+        </Box>
     );
 };
 

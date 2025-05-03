@@ -197,12 +197,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
                             options={Object.values(DatingApps)}
                         />
 
-                        <Button variant="contained" type="submit" sx={{
-                            backgroundColor: Object.keys(errors).length > 0 ? 'error.main' : 'primary.main',
-                            '&:hover': {
-                                backgroundColor: Object.keys(errors).length > 0 ? 'error.dark' : 'secondary.main',
-                            }
-                        }}>
+                        <Button variant="contained" type="submit" color="primary">
                             {strings.onboarding_next_button_label}
                         </Button>
                     </Box>
