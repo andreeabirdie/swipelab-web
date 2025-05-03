@@ -1,5 +1,11 @@
 export enum RelationshipStatus {
-    SINGLE="Single",
-    IN_A_RELATIONSHIP="In a relationship",
-    OTHER="Other"
+    SINGLE,
+    IN_A_RELATIONSHIP,
+    OTHER,
 }
+
+export const RelationshipStatusMap = [
+    "Single",
+    "In a relationship",
+    "Other"
+];

@@ -78,11 +78,11 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
             try {
                 setLoading(true);
                 await interactionService.completeExperiment(experimentId, payload);
-                Logger.info(`User finalized the final form for experiment${experimentId}`, {experimentId: experimentId});
+                Logger.info(`User finalized the final form for experiment ${experimentId}`, {experimentId: experimentId});
                 setLoading(false);
                 setSubmitted(true);
             } catch (error) {
-                Logger.error(`Failed to save final form answeres for experiment ${experimentId}`, {experimentId: experimentId});
+                Logger.error(`Failed to save final form answers for experiment ${experimentId}`, {experimentId: experimentId});
                 setIsError(true);
             }
         },

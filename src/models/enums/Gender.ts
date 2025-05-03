@@ -1,5 +1,11 @@
 export enum Gender {
-    Other="Other",
-    Female="Female",
-    Male="Male"
+    Other,
+    Female,
+    Male,
 }
+
+export const GenderMap = [
+    "Other",
+    "Female",
+    "Male"
+];

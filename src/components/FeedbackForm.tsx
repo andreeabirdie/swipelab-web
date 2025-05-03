@@ -10,6 +10,7 @@ type FeedbackFormProps = {
     userLiked: boolean | null,
     onSubmitForm: (changedOpinion: boolean, answers: Record<string, string>) => void
 }
+
 const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, onSubmitForm}) => {
     const promptKeys = feedbackPrompts.map((_, idx) => `prompt_${idx}`);
 
@@ -86,6 +87,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, 
                             <Typography variant="body1"><b>{switchQuestion}</b></Typography>
 
                             <FormControlLabel
+                                sx={{ '& .MuiFormControlLabel-label': { minWidth: '2em' } }}
                                 control={
                                     <Switch
                                         name="changedOpinion"
@@ -93,7 +95,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, 
                                         onChange={handleChange}
                                     />
                                 }
-                                label={values.changedOpinion ? 'Yes' : 'No'}
+                                label={values.changedOpinion ? strings.feedback_yes : strings.feedback_no }
                             />
                         </Box>
 

@@ -132,7 +132,14 @@ button {
 .button-container {
   display: flex;
   justify-content: space-evenly;
-  height: 60px;
   margin-top: 16px;
-  margin-bottom: 48px;
+  margin-bottom: 16px;
+}
+
+input[type="date"]
+{
+  display:block;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  min-height: 1.2em;
 }

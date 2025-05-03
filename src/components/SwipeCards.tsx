@@ -87,7 +87,28 @@ const SwipeCards: React.FC<SwipeProps> = ({
         setCurrentIndex((prev) => prev - 1);
     };
 
-    const flipCard = () => {
+    const waitForKeyboardToHide = (): Promise<void> => {
+        return new Promise((resolve) => {
+            const initialHeight = window.innerHeight;
+
+            const handleResize = () => {
+                if (window.innerHeight > initialHeight) {
+                    window.removeEventListener('resize', handleResize);
+                    resolve();
+                }
+            };
+
+            window.addEventListener('resize', handleResize);
+
+            setTimeout(() => {
+                window.removeEventListener('resize', handleResize);
+                resolve();
+            }, 300);
+        });
+    };
+
+    const flipCard = async () => {
+        await waitForKeyboardToHide()
         setNumberOfFlips((prev) => prev + 1)
     }
 

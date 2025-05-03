@@ -1,5 +1,11 @@
 export enum InterestedInGender {
-    Everyone="Everyone",
-    Female="Female",
-    Male="Male"
+    Everyone,
+    Female,
+    Male
 }
+
+export const InterestedInGenderMap = [
+    "Everyone",
+    "Female",
+    "Male"
+];

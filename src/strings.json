@@ -17,13 +17,21 @@
   "onboarding_dating_apps_question": "Which of these apps have you used before?",
   "onboarding_next_button_label": "Next",
   "onboarding_error_fill_required_fields": "Please fill in all required fields",
-  "onboarding_error_invalid_participant": "Unfortunately, you are not eligible to participate in this study",
+  "onboarding_error_invalid_participant": "Unfortunately, you are not eligible for the study. Thank you for your time!",
+  "onboarding_required": "Required",
+  "onboarding_one_box": "At least one box must be ticked",
+  "onboarding_old": "Are you more the 100 years old?",
+  "onboarding_time_travel": "We haven’t invented time travel yet. Please enter a real birthdate.",
+
 
   "swiping_error_answer_all_questions": "Please answer all questions",
   "swiping_about_me_section_label": "About me",
   "swiping_relationship_section_label": "Looking for",
   "swiping_hobbies_section_label": "Hobbies",
+
   "feedback_info": "Please answer the following questions about the profile you just saw. You can revisit the profile by tapping the button below",
+  "feedback_yes": "Yes",
+  "feedback_no": "No",
 
   "final_form_title": "It's finally over! But before you go, we have a few questions about your experience",
 

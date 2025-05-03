@@ -25,11 +25,11 @@ const DatingAppsCheckboxGroup: React.FC<DatingAppsCheckBoxGroupProps> = ({name, 
                                 checked={values.includes(option)}
                                 onChange={(e) => {
                                     if (e.target.checked) {
-                                        if (option === DatingApps.None) {
-                                            setFieldValue(name, [DatingApps.None]);
+                                        if (option === DatingApps[DatingApps.None]) {
+                                            setFieldValue(name, [DatingApps[DatingApps.None]]);
                                         } else {
                                             setFieldValue(name, [
-                                                ...values.filter((a: string) => a !== DatingApps.None),
+                                                ...values.filter((a: string) => a !== DatingApps[DatingApps.None]),
                                                 option,
                                             ]);
                                         }

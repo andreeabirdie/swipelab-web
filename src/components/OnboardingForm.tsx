@@ -2,13 +2,10 @@ import {Form, Formik} from 'formik';
 import {Box, Button, TextField} from '@mui/material';
 import strings from '../strings.json';
 import React, {useEffect, useRef, useState} from 'react';
-import {DatingApps} from "../models/enums/DatingApps.ts";
 import {Ethnicity} from '../models/enums/Ethnicity.ts';
 import {Country} from "../models/enums/Country.ts";
-import {UsageOfDatingApps} from "../models/enums/UsageOfDatingApps.ts";
-import {InterestedInGender} from "../models/enums/InterestedInGender.ts";
-import {RelationshipStatus} from "../models/enums/RelationshipStatus.ts";
-import {Gender} from "../models/enums/Gender.ts";
+import {UsageOfDatingApps, UsageOfDatingAppsMap} from "../models/enums/UsageOfDatingApps.ts";
+import {GenderMap} from "../models/enums/Gender.ts";
 import * as Yup from 'yup';
 import {differenceInYears, isAfter} from 'date-fns';
 import SelectField from './SelectField.tsx';
@@ -16,6 +13,9 @@ import AgeSlider from "./AgeSlider.tsx";
 import {OnboardingAnswers} from "../models/OnboardingAnswers.ts";
 import DatingAppsCheckboxGroup from "./DatingAppsCheckBoxGroup.tsx";
 import EthnicityRadioGroup from "./EthnicityRadioGroup.tsx";
+import {RelationshipStatusMap} from "../models/enums/RelationshipStatus.ts";
+import {InterestedInGenderMap} from "../models/enums/InterestedInGender.ts";
+import {DatingAppsMap} from "../models/enums/DatingApps.ts";
 
 type OnboardingFormProps = {
     onSubmit: (answers: OnboardingAnswers) => void
@@ -34,29 +34,29 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
 
     const validationSchema = Yup.object({
         dateOfBirth: Yup.string()
-            .required('Required')
-            .test('not-in-future', "We haven’t invented time travel yet. Please enter a real birthdate.", (value) => {
+            .required(strings.onboarding_required)
+            .test('not-in-future', strings.onboarding_time_travel, (value) => {
                 if (!value) return false;
                 return !isAfter(new Date(value), new Date());
             })
-            .test('is-18', "Unfortunately, you are not eligible for the study. Thank you for your time!", (value) => {
+            .test('is-18', strings.onboarding_error_invalid_participant, (value) => {
                 if (!value) return false;
                 return differenceInYears(new Date(), new Date(value)) >= 18;
             })
-            .test('is-100', "Are you more the 100 years old?", (value) => {
+            .test('is-100', strings.onboarding_old, (value) => {
                 if (!value) return false;
                 return differenceInYears(new Date(), new Date(value)) <= 100;
             }),
-        ethnicity: Yup.string().required('Required'),
-        countryOfResidence: Yup.string().required('Required'),
-        gender: Yup.string().required('Required'),
-        relationshipStatus: Yup.string().required('Required'),
-        interestedInGender: Yup.string().required('Required'),
-        ageRange: Yup.array().required('Required'),
+        ethnicity: Yup.string().required(strings.onboarding_required),
+        countryOfResidence: Yup.string().required(strings.onboarding_required),
+        gender: Yup.string().required(strings.onboarding_required),
+        relationshipStatus: Yup.string().required(strings.onboarding_required),
+        interestedInGender: Yup.string().required(strings.onboarding_required),
+        ageRange: Yup.array().required(strings.onboarding_required),
         experience: Yup.string()
-            .required('Required')
-            .notOneOf([UsageOfDatingApps.NeverUsed], "Unfortunately, you are not eligible for the study. Thank you for your time!"),
-        knownDatingApps: Yup.array().min(1, 'At least one box must be ticked')
+            .required(strings.onboarding_required)
+            .notOneOf([UsageOfDatingAppsMap[UsageOfDatingApps.NeverUsed]], strings.onboarding_error_invalid_participant),
+        knownDatingApps: Yup.array().min(1, strings.onboarding_one_box)
     });
 
     const initialValues: OnboardingAnswers = {
@@ -146,7 +146,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
                             handleChange={handleChange}
                             errors={errors.gender}
                             touched={touched.gender}
-                            options={Object.values(Gender)}
+                            options={GenderMap}
                         />
 
                         <SelectField
@@ -156,7 +156,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
                             handleChange={handleChange}
                             errors={errors.relationshipStatus}
                             touched={touched.relationshipStatus}
-                            options={Object.values(RelationshipStatus)}
+                            options={RelationshipStatusMap}
                         />
 
                         <Box textAlign="justify">{strings.onboarding_relationship_note}</Box>
@@ -168,7 +168,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
                             handleChange={handleChange}
                             errors={errors.interestedInGender}
                             touched={touched.interestedInGender}
-                            options={Object.values(InterestedInGender)}
+                            options={InterestedInGenderMap}
                         />
 
                         <AgeSlider
@@ -184,7 +184,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
                             handleChange={handleChange}
                             errors={errors.experience}
                             touched={touched.experience}
-                            options={Object.values(UsageOfDatingApps)}
+                            options={UsageOfDatingAppsMap}
                         />
 
                         <DatingAppsCheckboxGroup
@@ -194,7 +194,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
                             setFieldValue={setFieldValue}
                             errors={errors.knownDatingApps}
                             touched={touched.knownDatingApps}
-                            options={Object.values(DatingApps)}
+                            options={DatingAppsMap}
                         />
 
                         <Button variant="contained" type="submit" color="primary">
