@@ -1,10 +1,8 @@
 import {motion, useAnimation} from 'framer-motion';
-import React, {Ref, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import ProfileCard from './ProfileCard';
 import {CardInfo} from "../models/CardInfo.ts";
 import FlippableCard from "./FlippableCard.tsx";
-import {FormikProps} from "formik";
-import {FeedbackAnswers} from "../models/FeedbackAnswers.ts";
 
 type SwipeableCardProps = {
     index: number,
@@ -14,11 +12,10 @@ type SwipeableCardProps = {
     onSwipeEnd?: () => void,
     feedbackPrompts: string[] | null
     flipped: boolean
-    onSubmitFeedback: (changedOpinion: boolean, answers: Record<string, string>) => void,
-    formRef: Ref<FormikProps<FeedbackAnswers>>
+    onSubmitFeedback: (changedOpinion: boolean, answers: Record<string, string>) => void;
 }
 
-const SwipeableCard: React.FC<SwipeableCardProps> = ({index, currentIndex, card, swipeDirection, onSwipeEnd, feedbackPrompts, flipped, onSubmitFeedback, formRef}) => {
+const SwipeableCard: React.FC<SwipeableCardProps> = ({index, currentIndex, card, swipeDirection, onSwipeEnd, feedbackPrompts, flipped, onSubmitFeedback}) => {
     const controls = useAnimation();
 
     useEffect(() => {
@@ -57,7 +54,6 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({index, currentIndex, card,
                     flipped={flipped}
                     feedbackPrompts={feedbackPrompts}
                     onSubmitFeedback={onSubmitFeedback}
-                    formRef={formRef}
                 />
             ) : (
                 <ProfileCard profile={card.profile} />

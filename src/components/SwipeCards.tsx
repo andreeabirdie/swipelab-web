@@ -1,7 +1,7 @@
 import {Box, Button, LinearProgress, Typography, useTheme} from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CloseIcon from '@mui/icons-material/Close';
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {SwipeDirection} from "../models/enums/SwipeDirection.ts";
 import SwipeableCard from "../components/SwipeableCard";
 import {SwipeRequest} from "../models/requests/SwipeRequest.ts";
@@ -12,9 +12,7 @@ import {ReflectRequest} from "../models/requests/ReflectRequest.ts";
 import {SwipeUiState} from "../types/SwipeUiState.ts";
 import useScreenSize from "../hooks/useScreenSize.ts";
 import useCardSize from "../hooks/useCardHeight.ts";
-import {FormikProps} from "formik";
 import strings from "../strings.json";
-import {FeedbackAnswers} from "../models/FeedbackAnswers.ts";
 
 type SwipeProps = {
     experimentId: string
@@ -36,7 +34,6 @@ const SwipeCards: React.FC<SwipeProps> = ({
     const theme = useTheme();
     const screenSize = useScreenSize()
     const cardSize = useCardSize()
-    const formRef = useRef<FormikProps<FeedbackAnswers>>(null);
 
     const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | 'up' | null>(null);
     const [cardShownTime, setCardShownTime] = useState<number>(0);
@@ -116,35 +113,6 @@ const SwipeCards: React.FC<SwipeProps> = ({
         await waitForKeyboardToHide()
         setNumberOfFlips((prev) => prev + 1)
     }
-
-    const submitForm = () => {
-        if (numberOfFlips % 2 === 1) {
-            flipCard().then(_ => {});
-        }
-
-        console.log(formRef.current)
-        console.log("Errors", formRef.current?.errors);
-        console.log("Touched", formRef.current?.touched);
-        console.log("Values", formRef.current?.values);
-        if (formRef.current) {
-            markAllFieldsTouched();
-            formRef.current.handleSubmit();
-        }
-    }
-
-    const markAllFieldsTouched = () => {
-        if (!formRef.current) return;
-
-        const touchedState = Object.keys(formRef.current.values.promptsAnswers).reduce(
-            (acc, key) => {
-                acc[`promptsAnswers.${key}`] = true;
-                return acc;
-            },
-            {} as Record<string, boolean>
-        );
-
-        formRef.current.setTouched(touchedState, true)
-    };
 
     const submitFeebackForm = (changedOpinion: boolean, answers: Record<string, string>) => {
         setChangedMind(changedOpinion);
@@ -238,7 +206,6 @@ const SwipeCards: React.FC<SwipeProps> = ({
                                 feedbackPrompts={feedbackPrompts}
                                 flipped={numberOfFlips % 2 === 1}
                                 onSubmitFeedback={submitFeebackForm}
-                                formRef={formRef}
                             />
                         </div>
                     );
@@ -258,19 +225,6 @@ const SwipeCards: React.FC<SwipeProps> = ({
                         disabled={feedbackPrompts == null}
                     >
                         {numberOfFlips % 2 === 0 ? strings.feedback_go_to_questions : strings.feedback_see_profile}
-                    </Button>
-
-                    <Button
-                        onClick={submitForm}
-                        sx={{
-                            textTransform: 'none',
-                            backgroundColor: theme.palette.primary.main,
-                            color: theme.palette.secondary.contrastText,
-                            fontWeight: 'bold',
-                        }}
-                        disabled={feedbackPrompts == null}
-                    >
-                        {strings.feedback_submit}
                     </Button>
                 </Box> :
                 <Box className="button-container" sx={{width: cardSize.width}}>

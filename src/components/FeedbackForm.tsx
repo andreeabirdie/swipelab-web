@@ -1,19 +1,18 @@
-import React, {Ref} from "react";
+import React from "react";
 import {FeedbackAnswers} from "../models/FeedbackAnswers.ts";
 import * as Yup from "yup";
-import {Box, FormControlLabel, Switch, TextField, Typography} from "@mui/material";
-import {Form, Formik, FormikProps} from "formik";
+import {Box, Button, FormControlLabel, Switch, TextField, Typography} from "@mui/material";
+import {Form, Formik} from "formik";
 import strings from "../strings.json";
 
 type FeedbackFormProps = {
     profileId: string;
     feedbackPrompts: string[],
     userLiked: boolean | null,
-    onSubmitForm: (changedOpinion: boolean, answers: Record<string, string>) => void,
-    formRef: Ref<FormikProps<FeedbackAnswers>>;
+    onSubmitForm: (changedOpinion: boolean, answers: Record<string, string>) => void;
 }
 
-const FeedbackForm: React.FC<FeedbackFormProps> = ({profileId, feedbackPrompts, userLiked, onSubmitForm, formRef}) => {
+const FeedbackForm: React.FC<FeedbackFormProps> = ({profileId, feedbackPrompts, userLiked, onSubmitForm}) => {
     const promptKeys = feedbackPrompts.map((_, idx) => `prompt_${idx}_${profileId}`);
 
     const initialValues: FeedbackAnswers = {
@@ -39,7 +38,6 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({profileId, feedbackPrompts, 
     return (
         <Formik
             key={`${profileId}-form`}
-            innerRef={formRef}
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => {
@@ -102,6 +100,10 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({profileId, feedbackPrompts, 
                                 label={values.changedOpinion ? strings.feedback_yes : strings.feedback_no }
                             />
                         </Box>
+
+                        <Button type="submit" variant="contained" color="primary">
+                            {strings.feedback_submit}
+                        </Button>
                     </Box>
                 </Form>
             )}

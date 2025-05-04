@@ -1,22 +1,19 @@
 import {AnimatePresence, motion} from 'framer-motion';
-import React, {Ref} from "react";
+import React from "react";
 import ProfileCard from "./ProfileCard.tsx";
 import {CardInfo} from "../models/CardInfo.ts";
 import FeedbackCard from "./FeedbackCard.tsx";
 import useCardSize from "../hooks/useCardHeight.ts";
 import { Box } from '@mui/material';
-import {FormikProps} from "formik";
-import {FeedbackAnswers} from "../models/FeedbackAnswers.ts";
 
 type FlippableCardProps = {
     card: CardInfo;
     flipped: boolean;
     feedbackPrompts: string[] | null;
     onSubmitFeedback: (changedOpinion: boolean, answers: Record<string, string>) => void;
-    formRef: Ref<FormikProps<FeedbackAnswers>>;
 }
 
-const FlippableCard: React.FC<FlippableCardProps> = ({card, flipped, feedbackPrompts, onSubmitFeedback, formRef}) => {
+const FlippableCard: React.FC<FlippableCardProps> = ({card, flipped, feedbackPrompts, onSubmitFeedback}) => {
     const cardSize = useCardSize();
 
     return <Box
@@ -32,7 +29,6 @@ const FlippableCard: React.FC<FlippableCardProps> = ({card, flipped, feedbackPro
             card={card}
             feedbackPrompts={feedbackPrompts}
             onSubmitFeedback={onSubmitFeedback}
-            formRef={formRef}
         />
 
         <AnimatePresence>
