@@ -29,6 +29,7 @@ const FeedbackCard: React.FC<FeedbackCardProps> = ({card, feedbackPrompts, onSub
                     <LoadingContent loadingStrings={null}/>
                 </Box> :
                 <FeedbackForm
+                    profileId={card.profile.datingProfileId}
                     feedbackPrompts={feedbackPrompts}
                     userLiked={card.userLiked}
                     onSubmitForm={onSubmitFeedback}

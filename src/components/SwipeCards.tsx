@@ -36,7 +36,7 @@ const SwipeCards: React.FC<SwipeProps> = ({
     const theme = useTheme();
     const screenSize = useScreenSize()
     const cardSize = useCardSize()
-    const formRef = useRef<FormikProps<FeedbackAnswers>>(null)
+    const formRef = useRef<FormikProps<FeedbackAnswers>>(null);
 
     const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | 'up' | null>(null);
     const [cardShownTime, setCardShownTime] = useState<number>(0);
@@ -88,6 +88,7 @@ const SwipeCards: React.FC<SwipeProps> = ({
         if (currentIndex == 0) {
             setSwipePageState({status: "go_to_final_form"})
         }
+
         setCurrentIndex((prev) => prev - 1);
     };
 
@@ -122,10 +123,28 @@ const SwipeCards: React.FC<SwipeProps> = ({
         }
 
         console.log(formRef.current)
+        console.log("Errors", formRef.current?.errors);
+        console.log("Touched", formRef.current?.touched);
+        console.log("Values", formRef.current?.values);
         if (formRef.current) {
-            formRef.current.handleSubmit()
+            markAllFieldsTouched();
+            formRef.current.handleSubmit();
         }
     }
+
+    const markAllFieldsTouched = () => {
+        if (!formRef.current) return;
+
+        const touchedState = Object.keys(formRef.current.values.promptsAnswers).reduce(
+            (acc, key) => {
+                acc[`promptsAnswers.${key}`] = true;
+                return acc;
+            },
+            {} as Record<string, boolean>
+        );
+
+        formRef.current.setTouched(touchedState, true)
+    };
 
     const submitFeebackForm = (changedOpinion: boolean, answers: Record<string, string>) => {
         setChangedMind(changedOpinion);

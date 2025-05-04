@@ -15,4 +15,5 @@ export interface DatingProfile {
     education: number;
     hobbies: string[];
     personalityPrompts: Record<string, string>;
+    job: string;
 }

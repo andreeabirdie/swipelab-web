@@ -10,6 +10,7 @@ import PublicIcon from '@mui/icons-material/Public';
 import SchoolIcon from '@mui/icons-material/School';
 import SmokingRoomsIcon from '@mui/icons-material/SmokingRooms';
 import LocalBarIcon from '@mui/icons-material/LocalBar';
+import WorkIcon from '@mui/icons-material/Work';
 import {Box, Card, CardContent, CardMedia, Typography} from "@mui/material";
 import {Ethnicity} from "../models/enums/Ethnicity.ts";
 import {VicesPreference} from "../models/enums/VicesPreference.ts";
@@ -69,7 +70,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({profile}) => {
                         Object.values(Education)[profile.education],
                         Object.values(VicesPreference)[profile.smoking],
                         Object.values(VicesPreference)[profile.drinking],
-                        Object.values(KidsPreference)[profile.kidsPreference]
+                        Object.values(KidsPreference)[profile.kidsPreference],
+                        profile.job
                     ]}
                     icons={[
                         <CakeIcon/>,
@@ -78,7 +80,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({profile}) => {
                         <SchoolIcon/>,
                         <SmokingRoomsIcon/>,
                         <LocalBarIcon/>,
-                        <ChildFriendlyIcon/>
+                        <ChildFriendlyIcon/>,
+                        <WorkIcon/>
                     ]}
                 />
 

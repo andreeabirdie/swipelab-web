@@ -6,14 +6,15 @@ import {Form, Formik, FormikProps} from "formik";
 import strings from "../strings.json";
 
 type FeedbackFormProps = {
+    profileId: string;
     feedbackPrompts: string[],
     userLiked: boolean | null,
     onSubmitForm: (changedOpinion: boolean, answers: Record<string, string>) => void,
     formRef: Ref<FormikProps<FeedbackAnswers>>;
 }
 
-const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, onSubmitForm, formRef}) => {
-    const promptKeys = feedbackPrompts.map((_, idx) => `prompt_${idx}`);
+const FeedbackForm: React.FC<FeedbackFormProps> = ({profileId, feedbackPrompts, userLiked, onSubmitForm, formRef}) => {
+    const promptKeys = feedbackPrompts.map((_, idx) => `prompt_${idx}_${profileId}`);
 
     const initialValues: FeedbackAnswers = {
         promptsAnswers: promptKeys.reduce((acc, key) => {
@@ -37,19 +38,20 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, 
 
     return (
         <Formik
+            key={`${profileId}-form`}
             innerRef={formRef}
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => {
                 const remappedAnswers: Record<string, string> = {};
                 feedbackPrompts.forEach((prompt, idx) => {
-                    const key = `prompt_${idx}`;
+                    const key = `prompt_${idx}_${profileId}`;
                     remappedAnswers[prompt] = values.promptsAnswers[key];
                 });
                 onSubmitForm(values.changedOpinion, remappedAnswers);
             }}
         >
-            {({values, handleChange, errors}) => (
+            {({values, handleChange, errors, touched}) => (
                 <Form>
                     <Box
                         display="flex"
@@ -59,9 +61,9 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, 
                     >
                         <Typography textAlign="justify" variant="subtitle2">{strings.feedback_info}</Typography>
                         {feedbackPrompts.map((prompt, index) => {
-                            const key = `prompt_${index}`;
+                            const key = `prompt_${index}_${profileId}`;
                             return (
-                                <Box key={key}>
+                                <Box width='100%' key={key}>
                                     <Typography mb={3} textAlign="justify" variant="body1"><b>{prompt}</b></Typography>
                                     <TextField
                                         fullWidth
@@ -75,8 +77,8 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({feedbackPrompts, userLiked, 
                                                 handleChange(e);
                                             }
                                         }}
-                                        error={Boolean(errors.promptsAnswers?.[key])}
-                                        helperText={errors.promptsAnswers?.[key]}
+                                        error={Boolean(errors.promptsAnswers?.[key] && touched.promptsAnswers?.[key])}
+                                        helperText={errors.promptsAnswers?.[key] && touched.promptsAnswers?.[key] ? errors.promptsAnswers?.[key] : ''}
                                     />
                                     <Typography variant="caption" align="right" display="block">
                                         {values.promptsAnswers[key]?.length || 0}/500
