@@ -5,11 +5,12 @@ import {CardInfo} from "../models/CardInfo.ts";
 import FeedbackCard from "./FeedbackCard.tsx";
 import useCardSize from "../hooks/useCardHeight.ts";
 import { Box } from '@mui/material';
+import {FeedbackPromptResponse} from "../models/FeedbackPromptsResponse.ts";
 
 type FlippableCardProps = {
     card: CardInfo;
     flipped: boolean;
-    feedbackPrompts: string[] | null;
+    feedbackPrompts: FeedbackPromptResponse | null;
     onSubmitFeedback: (changedOpinion: boolean, answers: Record<string, string>) => void;
 }
 

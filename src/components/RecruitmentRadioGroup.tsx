@@ -1,42 +1,42 @@
 import {Box, FormControl, FormControlLabel, FormHelperText, Radio, RadioGroup, TextField} from "@mui/material";
 import React, {ChangeEvent} from "react";
-import {Ethnicity} from "../models/enums/Ethnicity.ts";
+import {Recruitment} from "../models/enums/Recuritment.ts";
 
-type EthnicityRadioGroupProps = {
+type RecruitmentRadioGroupProps = {
     name: string,
-    ethnicityValue: string,
-    otherEthnicityValue: string,
-    setEthnicity: (value: string) => void,
+    recruitmentValue: string,
+    otherRecruitmentValue: string,
+    setRecruitment: (value: string) => void,
     handleChange: {
         (e: ChangeEvent<any>): void;
         <T = string | ChangeEvent<any>>(field: T): T extends ChangeEvent<any> ? void : (e: string | ChangeEvent<any>) => void;
     }
     errors: string | undefined,
     touched: boolean | undefined,
-    otherEthnicityRef: React.RefObject<HTMLInputElement | null>,
-    ethnicityOptions: Ethnicity[]
+    otherRecruitmentRef: React.RefObject<HTMLInputElement | null>,
+    recruitmentOptions: Recruitment[]
 }
 
-const EthnicityRadioGroup: React.FC<EthnicityRadioGroupProps> = ({
+const RecruitmentRadioGroup: React.FC<RecruitmentRadioGroupProps> = ({
                                                                      name,
-                                                                     ethnicityValue,
-                                                                     otherEthnicityValue,
-                                                                     setEthnicity,
+                                                                     recruitmentValue,
+                                                                     otherRecruitmentValue,
+                                                                     setRecruitment,
                                                                      handleChange,
                                                                      errors,
                                                                      touched,
-                                                                     otherEthnicityRef,
-                                                                     ethnicityOptions,
+                                                                     otherRecruitmentRef,
+                                                                     recruitmentOptions,
                                                                  }) => {
     return (
         <FormControl fullWidth error={Boolean(errors && touched)}>
             <RadioGroup
-                aria-labelledby="ethnicity-group"
+                aria-labelledby="recruitment-group"
                 name={name}
-                value={ethnicityValue}
+                value={recruitmentValue}
                 onChange={(e) => {
                     handleChange(e);
-                    setEthnicity(e.target.value);
+                    setRecruitment(e.target.value);
                 }}
                 sx={{
                     display: 'flex',
@@ -46,11 +46,11 @@ const EthnicityRadioGroup: React.FC<EthnicityRadioGroupProps> = ({
                     justifyContent: 'space-around'
                 }}
             >
-                {ethnicityOptions.map((ethnicity: Ethnicity) => {
-                    if (ethnicity === Ethnicity.Other) {
+                {recruitmentOptions.map((recruitment: Recruitment) => {
+                    if (recruitment === Recruitment.Other) {
                         return (
                             <Box
-                                key={ethnicity}
+                                key={recruitment}
                                 sx={{
                                     display: 'flex',
                                     alignItems: 'center',
@@ -59,18 +59,18 @@ const EthnicityRadioGroup: React.FC<EthnicityRadioGroupProps> = ({
                                 }}
                             >
                                 <FormControlLabel
-                                    value={ethnicity}
+                                    value={recruitment}
                                     control={<Radio/>}
-                                    label={ethnicity}
+                                    label={recruitment}
                                     sx={{mr: 1}}
                                 />
                                 <TextField
-                                    inputRef={otherEthnicityRef}
-                                    name="otherEthnicity"
-                                    value={otherEthnicityValue}
+                                    inputRef={otherRecruitmentRef}
+                                    name="otherRecruitment"
+                                    value={otherRecruitmentValue}
                                     onChange={handleChange}
                                     size="small"
-                                    disabled={ethnicityValue != Ethnicity.Other}
+                                    disabled={recruitmentValue != Recruitment.Other}
                                     sx={{
                                         flexGrow: 1,
                                         minWidth: '150px'
@@ -81,10 +81,10 @@ const EthnicityRadioGroup: React.FC<EthnicityRadioGroupProps> = ({
                     } else {
                         return (
                             <FormControlLabel
-                                key={ethnicity}
-                                value={ethnicity}
+                                key={recruitment}
+                                value={recruitment}
                                 control={<Radio/>}
-                                label={ethnicity}
+                                label={recruitment}
                                 sx={{
                                     flexShrink: 0,
                                 }}
@@ -98,4 +98,4 @@ const EthnicityRadioGroup: React.FC<EthnicityRadioGroupProps> = ({
     );
 }
 
-export default EthnicityRadioGroup;
+export default RecruitmentRadioGroup;

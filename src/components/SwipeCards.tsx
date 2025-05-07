@@ -13,6 +13,9 @@ import {SwipeUiState} from "../types/SwipeUiState.ts";
 import useScreenSize from "../hooks/useScreenSize.ts";
 import useCardSize from "../hooks/useCardHeight.ts";
 import strings from "../strings.json";
+import {FeedbackPromptResponse} from "../models/FeedbackPromptsResponse.ts";
+import {localStorageService} from "../services/localStorageService.ts";
+import CustomizedDialog from "./CustomizedDialog.tsx";
 
 type SwipeProps = {
     experimentId: string
@@ -37,13 +40,22 @@ const SwipeCards: React.FC<SwipeProps> = ({
 
     const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | 'up' | null>(null);
     const [cardShownTime, setCardShownTime] = useState<number>(0);
-    const [feedbackPrompts, setFeedbackPrompts] = useState<string[] | null>(null);
+    const [feedbackPrompts, setFeedbackPrompts] = useState<FeedbackPromptResponse | null>(null);
+    const hasShownDialog : boolean | null = localStorageService.get("has_shown_second_phase_dialog");
+    const [hasShownSecondPhaseDialog, setHasShownSecondPhaseDialog] = React.useState(hasShownDialog ? hasShownDialog : false);
+    const [openDialog, setOpenDialog] = React.useState(false);
 
     const [currentIndex, setCurrentIndex] = useState(cards.length - 1);
     useEffect(() => {
         setCardShownTime(Date.now());
         if (cards[currentIndex].isFeedbackCard) {
             getReflection(experimentId).then(_ => {});
+        }
+
+        if (!hasShownSecondPhaseDialog && currentIndex > 0 && cards[currentIndex - 1].isFeedbackCard) {
+            setHasShownSecondPhaseDialog(true);
+            localStorageService.set("has_shown_second_phase_dialog", true);
+            setOpenDialog(true);
         }
     }, [currentIndex]);
     const [numberOfFlips, setNumberOfFlips] = useState(0);
@@ -58,7 +70,6 @@ const SwipeCards: React.FC<SwipeProps> = ({
         const elapsedTime = Math.floor((Date.now() - cardShownTime) / 1000);
 
         const currentCard = cards[currentIndex];
-        if (currentIndex > 0) cards[currentIndex - 1].userLiked = swipeDirection === 'right';
 
         if (currentCard.isFeedbackCard) {
             reflect({
@@ -124,7 +135,7 @@ const SwipeCards: React.FC<SwipeProps> = ({
         try {
             const response = await interactionService.getReflectionPrompts(experimentId);
             Logger.info(`Successfully retrieved reflection prompts for profile ${experimentId}`);
-            setFeedbackPrompts(response.prompts)
+            setFeedbackPrompts(response)
         } catch (err) {
             Logger.error(`Failed to retrieved reflection prompts for profile ${experimentId}`, {datingProfileId: experimentId});
             setSwipePageState({status: 'error'});
@@ -259,6 +270,15 @@ const SwipeCards: React.FC<SwipeProps> = ({
                     </Button>
                 </Box>
             }
+            {openDialog && <CustomizedDialog
+                title={strings.second_phase_dialog_title}
+                content={strings.second_phase_dialog_content}
+                buttonLabel={strings.second_phase_dialog_button_label}
+                onClose={(open: boolean) => {
+                    setOpenDialog(open);
+                    setCardShownTime(Date.now());
+                }}
+            />}
         </Box>
     );
 };

@@ -3,6 +3,7 @@ import React, {useEffect} from 'react';
 import ProfileCard from './ProfileCard';
 import {CardInfo} from "../models/CardInfo.ts";
 import FlippableCard from "./FlippableCard.tsx";
+import {FeedbackPromptResponse} from "../models/FeedbackPromptsResponse.ts";
 
 type SwipeableCardProps = {
     index: number,
@@ -10,7 +11,7 @@ type SwipeableCardProps = {
     card: CardInfo,
     swipeDirection: "left" | "right" | "up" | null,
     onSwipeEnd?: () => void,
-    feedbackPrompts: string[] | null
+    feedbackPrompts: FeedbackPromptResponse | null
     flipped: boolean
     onSubmitFeedback: (changedOpinion: boolean, answers: Record<string, string>) => void;
 }

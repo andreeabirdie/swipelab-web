@@ -4,16 +4,16 @@ import * as Yup from "yup";
 import {Box, Button, FormControlLabel, Switch, TextField, Typography} from "@mui/material";
 import {Form, Formik} from "formik";
 import strings from "../strings.json";
+import {FeedbackPromptResponse} from "../models/FeedbackPromptsResponse.ts";
 
 type FeedbackFormProps = {
     profileId: string;
-    feedbackPrompts: string[],
-    userLiked: boolean | null,
+    feedbackPrompts: FeedbackPromptResponse,
     onSubmitForm: (changedOpinion: boolean, answers: Record<string, string>) => void;
 }
 
-const FeedbackForm: React.FC<FeedbackFormProps> = ({profileId, feedbackPrompts, userLiked, onSubmitForm}) => {
-    const promptKeys = feedbackPrompts.map((_, idx) => `prompt_${idx}_${profileId}`);
+const FeedbackForm: React.FC<FeedbackFormProps> = ({profileId, feedbackPrompts, onSubmitForm}) => {
+    const promptKeys = feedbackPrompts.prompts.map((_, idx) => `prompt_${idx}_${profileId}`);
 
     const initialValues: FeedbackAnswers = {
         promptsAnswers: promptKeys.reduce((acc, key) => {
@@ -33,7 +33,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({profileId, feedbackPrompts, 
         changedOpinion: Yup.boolean().required()
     });
 
-    const switchQuestion = userLiked ? "Would you like to change your swipe option?" : `You previously ${userLiked ? 'liked' : 'disliked'} this profile. Would you like to change your answer?`
+    const switchQuestion = `You previously ${feedbackPrompts.previousSwipeState == 1 ? 'liked' : 'disliked'} this profile. Would you like to change your answer?`
 
     return (
         <Formik
@@ -42,7 +42,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({profileId, feedbackPrompts, 
             validationSchema={validationSchema}
             onSubmit={(values) => {
                 const remappedAnswers: Record<string, string> = {};
-                feedbackPrompts.forEach((prompt, idx) => {
+                feedbackPrompts.prompts.forEach((prompt, idx) => {
                     const key = `prompt_${idx}_${profileId}`;
                     remappedAnswers[prompt] = values.promptsAnswers[key];
                 });
@@ -58,7 +58,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({profileId, feedbackPrompts, 
                         gap={3}
                     >
                         <Typography textAlign="justify" variant="subtitle2">{strings.feedback_info}</Typography>
-                        {feedbackPrompts.map((prompt, index) => {
+                        {feedbackPrompts.prompts.map((prompt, index) => {
                             const key = `prompt_${index}_${profileId}`;
                             return (
                                 <Box width='100%' key={key}>
@@ -97,6 +97,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({profileId, feedbackPrompts, 
                                         onChange={handleChange}
                                     />
                                 }
+                                labelPlacement="bottom"
                                 label={values.changedOpinion ? strings.feedback_yes : strings.feedback_no }
                             />
                         </Box>

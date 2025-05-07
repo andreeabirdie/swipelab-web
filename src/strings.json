@@ -1,6 +1,6 @@
 {
   "onboarding_intro_to_experiment": "Thank you for your interest in participating. This study is part of a thesis project exploring decision-making in online dating and will take about 20 minutes of your time.",
-  "onboarding_data_disclaimer": "Your participation is completely voluntary and you can withdraw at any time. All data will be kept confidential and used only for research purposes.",
+  "onboarding_data_disclaimer": "Your participation is completely voluntary and you can withdraw at any time. All data will be kept confidential and used only for research purposes. If you have any questions you can contact us at swipelab.ku@gmail.com.",
   "onboarding_honesty_disclaimer": "Your answers are completely anonymous and will not be connected to your identity in any way. We encourage you to be as honest as possible.",
   "onboarding_preferences_disclaimer": "First, we need you to answer some questions to see if you are eligible for our study, and to help us find the right matches for you. Note: We will take your preferences into consideration, but you might still see people outside of your preferences.",
 
@@ -15,6 +15,7 @@
   "onboarding_ages_question": "What ages would you like to see?",
   "onboarding_dating_experience_question": "Have you ever used a dating app?",
   "onboarding_dating_apps_question": "Which of these apps have you used before?",
+  "onboarding_recruitment_question": "How did you find out about this study?",
   "onboarding_next_button_label": "Next",
   "onboarding_error_fill_required_fields": "Please fill in all required fields",
   "onboarding_error_invalid_participant": "Unfortunately, you are not eligible for the study. Thank you for your time!",
@@ -22,7 +23,6 @@
   "onboarding_one_box": "At least one box must be ticked",
   "onboarding_old": "Are you more the 100 years old?",
   "onboarding_time_travel": "We haven’t invented time travel yet. Please enter a real birthdate.",
-
 
   "swiping_error_answer_all_questions": "Please answer all questions",
   "swiping_about_me_section_label": "About me",
@@ -36,11 +36,14 @@
   "feedback_go_to_questions": "See profile",
   "feedback_submit": "Submit",
 
+  "second_phase_dialog_title": "You are entering the second part of the study",
+  "second_phase_dialog_content": "From now on you will need to answer 1-2 questions about the profile you're seeing.",
+  "second_phase_dialog_button_label": "Ok, show me the profiles",
 
   "final_form_title": "It's finally over! But before you go, we have a few questions about your experience",
 
   "thank_you_title": "Thank you for your participation!",
-  "thank_you_info": "Below is your participant id. Please save this if you wish to withdraw from the study. You can contact us at pbh469@alumni.ku.dk or zbv742@alumni.ku.dk if you want to withdraw or have any questions!",
+  "thank_you_info": "Below is your participant id. Please save this if you wish to withdraw from the study. You can contact us at swipelab.ku@gmail.com if you want to withdraw or have any questions!",
   "thank_you_participant_id": "Your participant id: ",
 
   "error_title": "Something went wrong",

@@ -4,10 +4,11 @@ import FeedbackForm from "./FeedbackForm.tsx";
 import React from "react";
 import useCardSize from "../hooks/useCardHeight.ts";
 import {CardInfo} from "../models/CardInfo.ts";
+import {FeedbackPromptResponse} from "../models/FeedbackPromptsResponse.ts";
 
 type FeedbackCardProps = {
     card: CardInfo;
-    feedbackPrompts: string[] | null;
+    feedbackPrompts: FeedbackPromptResponse | null;
     onSubmitFeedback: (changedOpinion: boolean, answers: Record<string, string>) => void;
 }
 
@@ -28,7 +29,6 @@ const FeedbackCard: React.FC<FeedbackCardProps> = ({card, feedbackPrompts, onSub
                 <FeedbackForm
                     profileId={card.profile.datingProfileId}
                     feedbackPrompts={feedbackPrompts}
-                    userLiked={card.userLiked}
                     onSubmitForm={onSubmitFeedback}
                 />
             }

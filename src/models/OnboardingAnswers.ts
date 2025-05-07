@@ -4,6 +4,8 @@ import {InterestedInGenderMap} from "./enums/InterestedInGender.ts";
 import {RelationshipStatusMap} from "./enums/RelationshipStatus.ts";
 import {UsageOfDatingAppsMap} from "./enums/UsageOfDatingApps.ts";
 import {DatingAppsMap} from "./enums/DatingApps.ts";
+import {Ethnicity} from "./enums/Ethnicity.ts";
+import {Recruitment} from "./enums/Recuritment.ts";
 
 export interface OnboardingAnswers {
     dateOfBirth: string; // DateOnly -> string (ISO format like 'YYYY-MM-DD')
@@ -16,6 +18,8 @@ export interface OnboardingAnswers {
     ageRange: [number, number];
     experience: string;
     knownDatingApps: string[];
+    recruitment: string;
+    otherRecruitment: string;
 }
 
 export const mapOnboardingAnswersToParticipant = (answers: OnboardingAnswers): ExperimentCreateRequest => {
@@ -25,10 +29,11 @@ export const mapOnboardingAnswersToParticipant = (answers: OnboardingAnswers): E
         interestedIn: InterestedInGenderMap.indexOf(answers.interestedInGender),
         minAge: answers.ageRange[0],
         maxAge: answers.ageRange[1],
-        ethnicity: answers.ethnicity,
+        ethnicity: answers.ethnicity === Ethnicity.Other? (answers.otherEthnicity != '' ? answers.otherEthnicity : answers.ethnicity) : answers.ethnicity,
         countryOfResidency: answers.countryOfResidence,
         usageOfDatingApps: UsageOfDatingAppsMap.indexOf(answers.experience),
         knownDatingApps: answers.knownDatingApps.map(app => DatingAppsMap.indexOf(app)),
-        relationshipStatus: RelationshipStatusMap.indexOf(answers.relationshipStatus)
+        relationshipStatus: RelationshipStatusMap.indexOf(answers.relationshipStatus),
+        recruitmentSource: answers.recruitment === Recruitment.Other? (answers.otherRecruitment != '' ? answers.otherRecruitment : answers.recruitment) :  answers.recruitment
     };
 };

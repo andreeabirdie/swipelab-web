@@ -12,10 +12,12 @@ import SelectField from './SelectField.tsx';
 import AgeSlider from "./AgeSlider.tsx";
 import {OnboardingAnswers} from "../models/OnboardingAnswers.ts";
 import DatingAppsCheckboxGroup from "./DatingAppsCheckBoxGroup.tsx";
-import EthnicityRadioGroup from "./EthnicityRadioGroup.tsx";
 import {RelationshipStatusMap} from "../models/enums/RelationshipStatus.ts";
 import {InterestedInGenderMap} from "../models/enums/InterestedInGender.ts";
 import {DatingAppsMap} from "../models/enums/DatingApps.ts";
+import {Recruitment} from "../models/enums/Recuritment.ts";
+import RecruitmentRadioGroup from "./RecruitmentRadioGroup.tsx";
+import EthnicityRadioGroup from "./EthnicityRadioGroup.tsx";
 
 type OnboardingFormProps = {
     onSubmit: (answers: OnboardingAnswers) => void
@@ -23,14 +25,22 @@ type OnboardingFormProps = {
 
 const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
     const otherEthnicityRef = useRef<HTMLInputElement | null>(null);
+    const otherRecruitmentRef = useRef<HTMLInputElement | null>(null);
 
     const [ethnicity, setEthnicity] = useState('')
+    const [recruitment, setRecruitment] = useState('')
 
     useEffect(() => {
         if (ethnicity === Ethnicity.Other) {
             otherEthnicityRef.current?.focus();
         }
     }, [ethnicity]);
+
+    useEffect(() => {
+        if (recruitment === Recruitment.Other) {
+            otherRecruitmentRef.current?.focus();
+        }
+    }, [recruitment]);
 
     const validationSchema = Yup.object({
         dateOfBirth: Yup.string()
@@ -59,17 +69,22 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
         knownDatingApps: Yup.array().min(1, strings.onboarding_one_box)
     });
 
+    const today = new Date();
+    const customDate = new Date(2005, today.getMonth(), today.getDate());
+
     const initialValues: OnboardingAnswers = {
-        dateOfBirth: '',
+        dateOfBirth: customDate.toISOString().split('T')[0],
         ethnicity: '',
         otherEthnicity: '',
-        countryOfResidence: '',
+        countryOfResidence: 'Denmark',
         gender: '',
         relationshipStatus: '',
         interestedInGender: '',
         ageRange: [20, 30],
         experience: '',
         knownDatingApps: [] as string[],
+        recruitment: '',
+        otherRecruitment: '',
     };
 
     return (
@@ -195,6 +210,21 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
                             errors={errors.knownDatingApps}
                             touched={touched.knownDatingApps}
                             options={DatingAppsMap}
+                        />
+
+                        <Box textAlign="justify"
+                             className="on-surface-text">{strings.onboarding_recruitment_question}</Box>
+
+                        <RecruitmentRadioGroup
+                            name={'recruitment'}
+                            recruitmentValue={values.recruitment}
+                            otherRecruitmentValue={values.otherRecruitment}
+                            setRecruitment={setRecruitment}
+                            handleChange={handleChange}
+                            errors={errors.recruitment}
+                            touched={touched.recruitment}
+                            otherRecruitmentRef={otherRecruitmentRef}
+                            recruitmentOptions={Object.values(Recruitment)}
                         />
 
                         <Button variant="contained" type="submit" color="primary">
