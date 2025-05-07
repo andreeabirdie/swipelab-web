@@ -97,8 +97,7 @@ const SwipePage: React.FC<SwipePageProps> = ({experiment}) => {
 function createCardInfo(profile: DatingProfile, isFeedback: boolean): CardInfo {
     return {
         profile: profile,
-        isFeedbackCard: isFeedback,
-        userLiked: null
+        isFeedbackCard: isFeedback
     };
 }
 
