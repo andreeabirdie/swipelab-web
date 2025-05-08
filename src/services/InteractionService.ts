@@ -30,11 +30,6 @@ class InteractionService {
         return response.data;
     }
 
-    async getFinalQuestions(experimentId: string): Promise<Question[]> {
-        const response = await axios.get<Question[]>(`${this.baseUrl}/experiment/${experimentId}/final-questions`);
-        return response.data;
-    }
-
     async completeExperiment(experimentId: string, data: QuestionAnswerItemRequest[]): Promise<Experiment> {
         const response = await axios.post<Experiment>(`${this.baseUrl}/experiment/${experimentId}/complete`, data);
         return response.data;

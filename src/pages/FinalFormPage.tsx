@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Question} from "../models/Question";
+import React, {useState} from "react";
+import {questions} from "../models/Question";
 import interactionService from "../services/InteractionService";
 import {useFormik} from "formik";
 import * as Yup from "yup";
@@ -19,26 +19,8 @@ type FinalFormProps = {
 }
 const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
     const [isError, setIsError] = useState<boolean>(false);
-    const [questions, setQuestions] = useState<Question[] | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(false);
     const [submitted, setSubmitted] = useState<boolean>(false);
-
-    const fetchQuestions = async () => {
-        try {
-            const fetchedQuestions = await interactionService.getFinalQuestions(experimentId);
-            Logger.info(`Successfully retrieved final questions for experiment ${experimentId}`, {experimentId: experimentId});
-            setQuestions(fetchedQuestions);
-        } catch (error) {
-            Logger.error(`Failed to fetch questions for experiment ${experimentId}`, {experimentId: experimentId});
-            setIsError(true);
-        } finally {
-            setLoading(false);
-        }
-    };
-    useEffect(() => {
-        fetchQuestions().then(_ => {
-        });
-    }, [experimentId]);
 
     const formik = useFormik({
         initialValues: {
@@ -52,7 +34,8 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
                     if (!questions) return false;
                     const errors: Record<string, string> = {};
                     questions.forEach((q) => {
-                        if (!answers || !answers[q.questionNumber] || answers[q.questionNumber].trim() === "") {
+                        const answer = answers?.[q.questionNumber]?.trim();
+                        if (!answer || answer === "") {
                             errors[q.questionNumber] = "Required";
                         }
                     });
@@ -72,6 +55,7 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
 
             const payload: QuestionAnswerItemRequest[] = Object.entries(values.answers).map(([key, value]) => ({
                 questionNumber: Number(key),
+                text: questions.find(q => q.questionNumber == Number(key)).text,
                 answer: value,
             } as QuestionAnswerItemRequest));
 
@@ -89,7 +73,7 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
         enableReinitialize: true,
         validateOnChange: false,
         validateOnBlur: false,
-        validateOnMount: true
+        validateOnMount: false
     });
 
     if (loading) {
