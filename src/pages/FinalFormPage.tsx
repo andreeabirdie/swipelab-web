@@ -19,7 +19,7 @@ type FinalFormProps = {
 }
 const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
     const [isError, setIsError] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(false);
     const [submitted, setSubmitted] = useState<boolean>(false);
 
     const formik = useFormik({
@@ -34,7 +34,9 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
                     if (!questions) return false;
                     const errors: Record<string, string> = {};
                     questions.forEach((q) => {
-                        if (!answers || !answers[q.questionNumber] || answers[q.questionNumber].trim() === "") {
+                        const isRequired = !!q.options; // Only require questions that have options (i.e., not free text)
+                        const answer = answers?.[q.questionNumber]?.trim();
+                        if (isRequired && (!answer || answer === "")) {
                             errors[q.questionNumber] = "Required";
                         }
                     });
@@ -71,7 +73,7 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
         enableReinitialize: true,
         validateOnChange: false,
         validateOnBlur: false,
-        validateOnMount: true
+        validateOnMount: false
     });
 
     if (loading) {
