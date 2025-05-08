@@ -85,10 +85,14 @@ const OnboardingPage: React.FC = () => {
                     strings.initializing_profile,
                     strings.defining_preferences,
                     strings.setting_boundaries,
+                    strings.waking_up,
+                    strings.this_may_take_a_minute,
                     strings.mapping_persona,
                     strings.configuring_traits,
                     strings.personalizing_experience,
-                    strings.establishing_identity
+                    strings.establishing_identity,
+                    strings.please_wait,
+                    strings.not_broken
                 ]}
             />;
         case "error":

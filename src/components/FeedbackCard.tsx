@@ -5,6 +5,7 @@ import React from "react";
 import useCardSize from "../hooks/useCardHeight.ts";
 import {CardInfo} from "../models/CardInfo.ts";
 import {FeedbackPromptResponse} from "../models/FeedbackPromptsResponse.ts";
+import strings from '../strings.json';
 
 type FeedbackCardProps = {
     card: CardInfo;
@@ -24,7 +25,12 @@ const FeedbackCard: React.FC<FeedbackCardProps> = ({card, feedbackPrompts, onSub
                     height: cardSize.height,
                     justifyContent: 'center'
                 }}>
-                    <LoadingContent loadingStrings={null}/>
+                    <LoadingContent loadingStrings={[
+                        strings.thinking_of_questions,
+                        strings.please_wait,
+                        strings.this_may_take_a_minute,
+                        strings.not_broken
+                    ]}/>
                 </Box> :
                 <FeedbackForm
                     profileId={card.profile.datingProfileId}

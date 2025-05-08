@@ -43,7 +43,7 @@
   "second_phase_dialog_content": "From now on you will need to answer 1-2 questions about the profile you're seeing.",
   "second_phase_dialog_button_label": "Ok, show me the profiles",
 
-  "final_form_title": "It's finally over! But before you go, we have a few questions about your experience",
+  "final_form_title": "It's finally over! But before you go, we have a few questions about your experience and then you are done. They're very important for our results so please don't skip this.",
 
   "thank_you_title": "Thank you for your participation!",
   "thank_you_info": "Below is your participant id. Please save this if you wish to withdraw from the study. You can contact us at our email below if you want to withdraw or have any questions!",
@@ -55,10 +55,15 @@
   "initializing_profile": "Initializing profile",
   "defining_preferences": "Defining preferences",
   "setting_boundaries": "Setting boundaries",
+  "waking_up": "Server is waking up",
   "mapping_persona": "Mapping persona",
   "configuring_traits": "Configuring traits",
   "personalizing_experience": "Personalizing experience",
   "establishing_identity": "Establishing identity",
+  "thinking_of_questions": "Thinking of questions",
+  "please_wait": "Please wait",
+  "this_may_take_a_minute": "This may take a minute",
+  "not_broken": "I am not broken",
 
   "scanning_pool": "Scanning match pool",
   "filtering_profiles": "Filtering profiles",
@@ -68,5 +73,5 @@
   "refining_matches": "Refining matches",
   "loading_connections": "Loading connections",
 
-  "version": "v1.0.0"
+  "version": "v1.0.1"
 }
