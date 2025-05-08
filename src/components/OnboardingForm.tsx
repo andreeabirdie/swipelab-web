@@ -71,7 +71,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
     });
 
     const today = new Date();
-    const customDate = new Date(2005, today.getMonth(), today.getDate());
+    const customDate = new Date(2005, today.getMonth(), today.getDate(), 12);
 
     const initialValues: OnboardingAnswers = {
         dateOfBirth: customDate.toISOString().split('T')[0],
