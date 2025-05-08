@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Question} from "../models/Question";
+import React, {useState} from "react";
+import {questions} from "../models/Question";
 import interactionService from "../services/InteractionService";
 import {useFormik} from "formik";
 import * as Yup from "yup";
@@ -19,26 +19,8 @@ type FinalFormProps = {
 }
 const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
     const [isError, setIsError] = useState<boolean>(false);
-    const [questions, setQuestions] = useState<Question[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [submitted, setSubmitted] = useState<boolean>(false);
-
-    const fetchQuestions = async () => {
-        try {
-            const fetchedQuestions = await interactionService.getFinalQuestions(experimentId);
-            Logger.info(`Successfully retrieved final questions for experiment ${experimentId}`, {experimentId: experimentId});
-            setQuestions(fetchedQuestions);
-        } catch (error) {
-            Logger.error(`Failed to fetch questions for experiment ${experimentId}`, {experimentId: experimentId});
-            setIsError(true);
-        } finally {
-            setLoading(false);
-        }
-    };
-    useEffect(() => {
-        fetchQuestions().then(_ => {
-        });
-    }, [experimentId]);
 
     const formik = useFormik({
         initialValues: {
