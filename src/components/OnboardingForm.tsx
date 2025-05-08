@@ -120,18 +120,6 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
                         <Box textAlign="center"
                              className="on-surface-text">If you have any questions you can contact us at <a href="mailto:swipelab.ku@gmail.com">swipelab.ku@gmail.com</a></Box>
 
-                        <TextField
-                            fullWidth
-                            label={strings.onboarding_date_of_birth_question}
-                            name="dateOfBirth"
-                            type="date"
-                            slotProps={{inputLabel: {shrink: true}}}
-                            value={values.dateOfBirth}
-                            onChange={handleChange}
-                            error={Boolean(errors.dateOfBirth && touched.dateOfBirth)}
-                            helperText={errors.dateOfBirth && touched.dateOfBirth ? errors.dateOfBirth : ''}
-                        />
-
                         <Box textAlign="justify"
                              className="on-surface-text">{strings.onboarding_ethnicity_question}</Box>
 
@@ -147,6 +135,17 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
                             ethnicityOptions={Object.values(Ethnicity)}
                         />
 
+                        <TextField
+                            fullWidth
+                            label={strings.onboarding_date_of_birth_question}
+                            name="dateOfBirth"
+                            type="date"
+                            slotProps={{inputLabel: {shrink: true}}}
+                            value={values.dateOfBirth}
+                            onChange={handleChange}
+                            error={Boolean(errors.dateOfBirth && touched.dateOfBirth)}
+                            helperText={errors.dateOfBirth && touched.dateOfBirth ? errors.dateOfBirth : ''}
+                        />
 
                         <SelectField
                             name={'countryOfResidence'}
