@@ -67,6 +67,7 @@ const OnboardingPage: React.FC = () => {
     const createExperiment= async (answers: OnboardingAnswers)=> {
         try {
             setUiState({status: 'loading'});
+            localStorageService.set("has_shown_second_phase_dialog", false);
             const experiment = await interactionService.createExperiment(mapOnboardingAnswersToParticipant(answers));
             localStorageService.set<Experiment>('current_experiment', experiment);
             Logger.info(`Successfully created experiment ${experiment}`);

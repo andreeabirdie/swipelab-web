@@ -20,6 +20,8 @@ export interface OnboardingAnswers {
     knownDatingApps: string[];
     recruitment: string;
     otherRecruitment: string;
+    onboardingConfidence: string;
+    onboardingComfortable: string;
 }
 
 export const mapOnboardingAnswersToParticipant = (answers: OnboardingAnswers): ExperimentCreateRequest => {
@@ -34,6 +36,8 @@ export const mapOnboardingAnswersToParticipant = (answers: OnboardingAnswers): E
         usageOfDatingApps: UsageOfDatingAppsMap.indexOf(answers.experience),
         knownDatingApps: answers.knownDatingApps.map(app => DatingAppsMap.indexOf(app)),
         relationshipStatus: RelationshipStatusMap.indexOf(answers.relationshipStatus),
-        recruitmentSource: answers.recruitment === Recruitment.Other? (answers.otherRecruitment != '' ? answers.otherRecruitment : answers.recruitment) :  answers.recruitment
+        recruitmentSource: answers.recruitment === Recruitment.Other? (answers.otherRecruitment != '' ? answers.otherRecruitment : answers.recruitment) :  answers.recruitment,
+        onboardingConfidence: answers.onboardingConfidence,
+        onboardingComfortable: answers.onboardingComfortable
     };
 };

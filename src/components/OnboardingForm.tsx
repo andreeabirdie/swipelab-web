@@ -18,6 +18,7 @@ import {DatingAppsMap} from "../models/enums/DatingApps.ts";
 import {Recruitment} from "../models/enums/Recuritment.ts";
 import RecruitmentRadioGroup from "./RecruitmentRadioGroup.tsx";
 import EthnicityRadioGroup from "./EthnicityRadioGroup.tsx";
+import {questions} from "../models/Question.ts";
 
 type OnboardingFormProps = {
     onSubmit: (answers: OnboardingAnswers) => void
@@ -85,6 +86,8 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
         knownDatingApps: [] as string[],
         recruitment: '',
         otherRecruitment: '',
+        onboardingConfidence: '',
+        onboardingComfortable: '',
     };
 
     return (
@@ -114,7 +117,8 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
                              className="on-surface-text">{strings.onboarding_honesty_disclaimer}</Box>
                         <Box textAlign="justify"
                              className="on-surface-text">{strings.onboarding_preferences_disclaimer}</Box>
-
+                        <Box textAlign="center"
+                             className="on-surface-text">If you have any questions you can contact us at <a href="mailto:swipelab.ku@gmail.com">swipelab.ku@gmail.com</a></Box>
 
                         <TextField
                             fullWidth
@@ -227,9 +231,38 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({onSubmit}) => {
                             recruitmentOptions={Object.values(Recruitment)}
                         />
 
+                        <Box textAlign="justify"
+                             className="on-surface-text">{strings.onboarding_confidence_question}</Box>
+
+                        <SelectField
+                            name={'onboardingConfidence'}
+                            label={strings.onboarding_choose_an_option}
+                            value={values.onboardingConfidence}
+                            handleChange={handleChange}
+                            errors={errors.onboardingConfidence}
+                            touched={touched.onboardingConfidence}
+                            options={questions.find(q => q.questionNumber === 6)?.options ?? ["1", "2", "3", "4", "5", "6", "7"]}
+                        />
+
+                        <Box textAlign="justify"
+                             className="on-surface-text">{strings.onboarding_comfortable_question}</Box>
+
+                        <SelectField
+                            name={'onboardingComfortable'}
+                            label={strings.onboarding_choose_an_option}
+                            value={values.onboardingComfortable}
+                            handleChange={handleChange}
+                            errors={errors.onboardingComfortable}
+                            touched={touched.onboardingComfortable}
+                            options={questions.find(q => q.questionNumber === 7)?.options ?? ["1", "2", "3", "4", "5", "6", "7"]}
+                        />
+
                         <Button variant="contained" type="submit" color="primary">
                             {strings.onboarding_next_button_label}
                         </Button>
+
+                        <Box textAlign="justify"
+                             className="version">{strings.version}</Box>
                     </Box>
                 </Form>
             )}

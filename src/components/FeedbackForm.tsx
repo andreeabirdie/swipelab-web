@@ -26,7 +26,10 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({profileId, feedbackPrompts, 
     const validationSchema = Yup.object({
         promptsAnswers: Yup.object(
             promptKeys.reduce((acc, key) => {
-                acc[key] = Yup.string().required(strings.form_required).max(500, 'Max 500 characters');
+                acc[key] = Yup
+                    .string()
+                    .test('not-only-whitespace', 'Must be more than just whitespace', value => typeof value === 'string' && value.trim().length > 0)
+                    .required(strings.form_required).max(500, 'Max 500 characters');
                 return acc;
             }, {} as Record<string, Yup.StringSchema>)
         ),

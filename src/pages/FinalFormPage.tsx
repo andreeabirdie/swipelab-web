@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {questions} from "../models/Question";
 import interactionService from "../services/InteractionService";
-import {useFormik} from "formik";
+import {Form, Formik} from "formik";
 import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -22,59 +22,41 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [submitted, setSubmitted] = useState<boolean>(false);
 
-    const formik = useFormik({
-        initialValues: {
-            answers: {} as Record<number, string>,
-        },
-        validationSchema: Yup.object().shape({
-            answers: Yup.object().test(
-                "individual-answers",
-                "",
-                function (answers: Record<number, string>) {
-                    if (!questions) return false;
-                    const errors: Record<string, string> = {};
-                    questions.forEach((q) => {
-                        const answer = answers?.[q.questionNumber]?.trim();
-                        if (!answer || answer === "") {
-                            errors[q.questionNumber] = "Required";
-                        }
-                    });
-                    if (Object.keys(errors).length > 0) {
-                        throw this.createError({path: "answers", message: errors});
-                    }
-                    return true;
-                }
-            ),
-        }),
-        onSubmit: async (values, {setSubmitting, validateForm}) => {
-            const formErrors = await validateForm();
-            if (Object.keys(formErrors).length > 0) {
-                setSubmitting(false);
-                return;
-            }
+    const initialValues: Record<number, string> = questions.reduce((acc, q) => {
+        acc[q.questionNumber] = "";
+        return acc;
+    }, {} as Record<number, string>);
 
-            const payload: QuestionAnswerItemRequest[] = Object.entries(values.answers).map(([key, value]) => ({
-                questionNumber: Number(key),
-                text: questions.find(q => q.questionNumber == Number(key)).text,
-                answer: value,
-            } as QuestionAnswerItemRequest));
+    const validationSchema = Yup.object(
+        questions.reduce((acc, q) => {
+            acc[q.questionNumber] = Yup.string()
+                .required("This field is required")
+                .test(
+                    "not-blank",
+                    "This field cannot be only whitespace",
+                    value => value.trim().length > 0
+                );
+            return acc;
+        }, {} as Record<number, Yup.StringSchema>));
 
-            try {
-                setLoading(true);
-                await interactionService.completeExperiment(experimentId, payload);
-                Logger.info(`User finalized the final form for experiment ${experimentId}`, {experimentId: experimentId});
-                setLoading(false);
-                setSubmitted(true);
-            } catch (error) {
-                Logger.error(`Failed to save final form answers for experiment ${experimentId}`, {experimentId: experimentId});
-                setIsError(true);
-            }
-        },
-        enableReinitialize: true,
-        validateOnChange: false,
-        validateOnBlur: false,
-        validateOnMount: false
-    });
+    const handleSubmit = async (values : Record<number, string>) => {
+        const payload: QuestionAnswerItemRequest[] = Object.entries(values).map(([key, value]) => ({
+            questionNumber: Number(key),
+            text: questions.find(q => q.questionNumber == Number(key))?.text,
+            answer: value,
+        } as QuestionAnswerItemRequest));
+
+        try {
+            setLoading(true);
+            await interactionService.completeExperiment(experimentId, payload);
+            Logger.info(`User finalized the final form for experiment ${experimentId}`, {experimentId: experimentId});
+            setLoading(false);
+            setSubmitted(true);
+        } catch (error) {
+            Logger.error(`Failed to save final form answers for experiment ${experimentId}`, {experimentId: experimentId});
+            setIsError(true);
+        }
+    }
 
     if (loading) {
         return <LoadingContent loadingStrings={null}/>;
@@ -89,58 +71,63 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
     }
 
     return (
-        <form onSubmit={formik.handleSubmit}>
-            <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                gap={3}
-                maxWidth="500px"
-                margin="0 auto"
-                padding={2}
-            >
-                <div>{strings.final_form_title}</div>
-                {questions.map((question, index) => {
-                    const fieldName = `answers.${question.questionNumber}`;
-                    const error = formik.errors.answers && typeof formik.errors.answers === 'object'
-                        ? formik.errors.answers[question.questionNumber]
-                        : undefined;
+        <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={(values) => {
+                handleSubmit(values)
+            }}
+        >
+            {({values, handleChange, errors, touched}) => (
 
-                    return (
-                        <div key={question.questionNumber} style={{marginBottom: "10px"}}>
-                            <h3>Question {index + 1}</h3>
-                            <p>{question.text}</p>
-                            {question.options && question.options.length > 0 ? (
-                                <SelectField
-                                    name={fieldName}
-                                    label="Select an option"
-                                    value={formik.values.answers[question.questionNumber] || ""}
-                                    handleChange={formik.handleChange}
-                                    errors={error}
-                                    touched={Boolean(error)}
-                                    options={question.options}
-                                />
-                            ) : (
-                                <TextField
-                                    fullWidth
-                                    name={fieldName}
-                                    label="Your answer"
-                                    value={formik.values.answers[question.questionNumber] || ""}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={Boolean(error)}
-                                    helperText={error}
-                                />
-                            )}
-                        </div>
-                    );
-                })}
+                <Form>
+                    <Box
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="center"
+                        gap={3}
+                        maxWidth="500px"
+                        margin="0 auto"
+                        padding={2}
+                    >
+                        <div>{strings.final_form_title}</div>
+                        {questions.map((question, index) => {
+                            return (
+                                <div key={question.questionNumber} style={{marginBottom: "10px", width: "100%"}}>
+                                    <h3>Question {index + 1}</h3>
+                                    <p>{question.text}</p>
+                                    {question.options && question.options.length > 0 ? (
+                                        <SelectField
+                                            name={`${question.questionNumber}`}
+                                            label={strings.onboarding_choose_an_option}
+                                            value={values[question.questionNumber]}
+                                            handleChange={handleChange}
+                                            errors={errors[question.questionNumber]}
+                                            touched={touched[question.questionNumber]}
+                                            options={question.options}
+                                        />
+                                    ) : (
+                                        <TextField
+                                            fullWidth
+                                            name={`${question.questionNumber}`}
+                                            label="Your answer"
+                                            value={values[question.questionNumber] || ""}
+                                            onChange={handleChange}
+                                            error={Boolean(errors[question.questionNumber] && touched[question.questionNumber])}
+                                            helperText={errors[question.questionNumber] && touched[question.questionNumber] ? errors[question.questionNumber] : ''}
+                                        />
+                                    )}
+                                </div>
+                            );
+                        })}
 
-                <Button type="submit" variant="contained" color="primary">
-                    Submit
-                </Button>
-            </Box>
-        </form>
+                        <Button type="submit" variant="contained" color="primary">
+                            Submit
+                        </Button>
+                    </Box>
+                </Form>
+            )}
+        </Formik>
     );
 }
 

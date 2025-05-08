@@ -16,4 +16,6 @@ export interface ExperimentCreateRequest {
     knownDatingApps: DatingApps[];
     relationshipStatus: RelationshipStatus;
     recruitmentSource: string;
+    onboardingConfidence: string;
+    onboardingComfortable: string;
 }

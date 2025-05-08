@@ -1,8 +1,8 @@
 {
   "onboarding_intro_to_experiment": "Thank you for your interest in participating. This study is part of a thesis project exploring decision-making in online dating and will take about 20 minutes of your time.",
-  "onboarding_data_disclaimer": "Your participation is completely voluntary and you can withdraw at any time. All data will be kept confidential and used only for research purposes. If you have any questions you can contact us at swipelab.ku@gmail.com.",
+  "onboarding_data_disclaimer": "Your participation is completely voluntary and you can withdraw at any time. All data will be kept confidential and used only for research purposes.",
   "onboarding_honesty_disclaimer": "Your answers are completely anonymous and will not be connected to your identity in any way. We encourage you to be as honest as possible.",
-  "onboarding_preferences_disclaimer": "First, we need you to answer some questions to see if you are eligible for our study, and to help us find the right matches for you. Note: We will take your preferences into consideration, but you might still see people outside of your preferences.",
+  "onboarding_preferences_disclaimer": "First, we need you to answer some questions to help us find the right matches for you. Note: We will take your preferences into consideration, but you might still see people outside of your preferences.",
 
   "onboarding_date_of_birth_question": "When were you born?",
   "onboarding_ethnicity_question": "What's your ethnicity?",
@@ -23,13 +23,16 @@
   "onboarding_one_box": "At least one box must be ticked",
   "onboarding_old": "Are you more the 100 years old?",
   "onboarding_time_travel": "We haven’t invented time travel yet. Please enter a real birthdate.",
+  "onboarding_confidence_question": "One a scale of 1-7,  how CONFIDENT do you think you'd feel deciding whether to like or reject a profile?",
+  "onboarding_comfortable_question": "One a scale of 1-7, how COMFORTABLE do you think you'd feel deciding whether to like or reject a profile?",
+  "onboarding_choose_an_option": "Select an option",
 
   "swiping_error_answer_all_questions": "Please answer all questions",
   "swiping_about_me_section_label": "About me",
   "swiping_relationship_section_label": "Looking for",
   "swiping_hobbies_section_label": "Hobbies",
 
-  "feedback_info": "Please answer the following questions about the profile you just saw. You can revisit the profile by tapping the button below",
+  "feedback_info": "Please answer the following question(s) about the profile you just saw. You can revisit the profile by tapping the button below",
   "feedback_yes": "Yes",
   "feedback_no": "No",
   "feedback_see_profile": "See questions",
@@ -43,7 +46,7 @@
   "final_form_title": "It's finally over! But before you go, we have a few questions about your experience",
 
   "thank_you_title": "Thank you for your participation!",
-  "thank_you_info": "Below is your participant id. Please save this if you wish to withdraw from the study. You can contact us at swipelab.ku@gmail.com if you want to withdraw or have any questions!",
+  "thank_you_info": "Below is your participant id. Please save this if you wish to withdraw from the study. You can contact us at our email below if you want to withdraw or have any questions!",
   "thank_you_participant_id": "Your participant id: ",
 
   "error_title": "Something went wrong",
@@ -63,5 +66,7 @@
   "matching_preferences": "Matching preferences",
   "estimating_compatibility": "Estimating compatibility",
   "refining_matches": "Refining matches",
-  "loading_connections": "Loading connections"
+  "loading_connections": "Loading connections",
+
+  "version": "v1.0.0"
 }

@@ -24,7 +24,7 @@ export const questions: Question[] = [
     },
     {
         questionNumber: 5,
-        text: "Has participating in this study changed your perspective or attitude towards dating apps?",
+        text: "Has participating in this study changed your perspective or attitude towards dating apps? Please justify your answer.",
     },
     {
         questionNumber: 6,
