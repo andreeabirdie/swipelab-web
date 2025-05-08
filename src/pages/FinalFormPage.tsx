@@ -55,7 +55,7 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
 
             const payload: QuestionAnswerItemRequest[] = Object.entries(values.answers).map(([key, value]) => ({
                 questionNumber: Number(key),
-                text: questions.find(q => q.questionNumber == Number(key))?.text,
+                text: questions.find(q => q.questionNumber == Number(key)).text,
                 answer: value,
             } as QuestionAnswerItemRequest));
 

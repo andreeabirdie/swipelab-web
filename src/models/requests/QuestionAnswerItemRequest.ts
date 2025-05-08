@@ -1,5 +1,5 @@
 export interface QuestionAnswerItemRequest{
     questionNumber: number;
-    text?: string;
+    text: string;
     answer: string;
 }
