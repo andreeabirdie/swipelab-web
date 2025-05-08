@@ -34,9 +34,8 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
                     if (!questions) return false;
                     const errors: Record<string, string> = {};
                     questions.forEach((q) => {
-                        const isRequired = !!q.options; // Only require questions that have options (i.e., not free text)
                         const answer = answers?.[q.questionNumber]?.trim();
-                        if (isRequired && (!answer || answer === "")) {
+                        if (!answer || answer === "") {
                             errors[q.questionNumber] = "Required";
                         }
                     });
@@ -56,6 +55,7 @@ const FinalFormPage: React.FC<FinalFormProps> = ({experimentId}) => {
 
             const payload: QuestionAnswerItemRequest[] = Object.entries(values.answers).map(([key, value]) => ({
                 questionNumber: Number(key),
+                text: questions.find(q => q.questionNumber == Number(key))?.text,
                 answer: value,
             } as QuestionAnswerItemRequest));
 
