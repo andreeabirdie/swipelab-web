@@ -23,8 +23,8 @@
   "onboarding_one_box": "At least one box must be ticked",
   "onboarding_old": "Are you more the 100 years old?",
   "onboarding_time_travel": "We haven’t invented time travel yet. Please enter a real birthdate.",
-  "onboarding_confidence_question": "One a scale of 1-7,  how CONFIDENT do you think you'd feel deciding whether to like or reject a profile?",
-  "onboarding_comfortable_question": "One a scale of 1-7, how COMFORTABLE do you think you'd feel deciding whether to like or reject a profile?",
+  "onboarding_confidence_question": "On a scale of 1-7,  how CONFIDENT do you think you'd feel deciding whether to like or reject a profile?",
+  "onboarding_comfortable_question": "On a scale of 1-7, how COMFORTABLE do you think you'd feel deciding whether to like or reject a profile?",
   "onboarding_choose_an_option": "Select an option",
 
   "swiping_error_answer_all_questions": "Please answer all questions",
