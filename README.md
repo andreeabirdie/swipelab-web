@@ -1,1 +1,1 @@
-Check it out at https://andreeabirdie.github.io/swipelab-web/
+Check it out at https://swipelab.me/swipelab-web/
