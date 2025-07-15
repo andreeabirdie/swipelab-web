@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
 import React from 'react';
 import './style.css'
-import OnboardingPage from "./pages/OnboardingPage.tsx";
+import GraduatedPage from "./pages/GraduatedPage.tsx";
 import {createTheme, ThemeProvider} from "@mui/material";
 import {themeOptions} from "./themeOptions.ts";
 
@@ -9,7 +9,8 @@ const App: React.FC = () => {
     const theme = createTheme(themeOptions)
     return (
         <ThemeProvider theme={theme}>
-            <OnboardingPage/>
+            <GraduatedPage/>
+            {/*<OnboardingPage/>*/}
         </ThemeProvider>
     );
 };

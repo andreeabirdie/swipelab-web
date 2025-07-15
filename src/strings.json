@@ -73,5 +73,11 @@
   "refining_matches": "Refining matches",
   "loading_connections": "Loading connections",
 
-  "version": "v1.0.1"
+  "dk_link": "https://soeg.kb.dk/permalink/45KBDK_KGL/1pioq0f/alma99126519258505763",
+  "research_gate_link": "https://www.researchgate.net/publication/393659239_Designing_for_Reflection_in_Swipe-Based_Interfaces",
+  "final_thanks": "Thank you for your interest in participating in our study!",
+  "final_info": "We've completed data collection, written our thesis, and officially graduated! If you're curious about our work, you can view or request access to the thesis using one of the links below.",
+  "final_poster": "If you found this page by scanning a QR code on a poster, feel free to take the poster down. Thanks again!",
+
+  "version": "v1.0.2"
 }
