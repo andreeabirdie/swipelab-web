@@ -1,4 +1,4 @@
-Check out the project [here](https://swipelab.me/swipelab-web/).
+~Check out the project [here](https://swipelab.me/swipelab-web/).~ This is no longer hosted
 
 This frontend is designed to work together with the [SwipeLab server](https://github.com/soniadragulescu/swipelab-server).
 
